@@ -4,15 +4,75 @@
     <meta charset="UTF-8">
     <title>Mi Lista de Películas</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 20px; }
-        h1 { text-align: center; color: #333; }
-        .pelicula { display: inline-block; margin: 15px; text-align: center; width: 200px; }
-        .pelicula img { width: 100%; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-        .pelicula p { margin-top: 8px; font-weight: bold; color: #444; }
+        body { 
+            font-family: "Source Sans Pro", Arial, sans-serif; 
+            background: #0d253f; /* azul oscuro TMDB */
+            margin: 20px; 
+            color: white;
+        }
+        h1 { 
+            text-align: center; 
+            color: #01b4e4; /* celeste TMDB */
+            font-size: 2.5em;
+        }
+        .pelicula { 
+            display: inline-block; 
+            margin: 20px; 
+            text-align: center; 
+            width: 200px; 
+            position: relative;
+            cursor: pointer;
+        }
+        .pelicula img { 
+            width: 100%; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+        }
+        .pelicula p { 
+            margin-top: 8px; 
+            font-weight: bold; 
+            font-size: 1.1em; 
+        }
+        .rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #01b4e4;
+            color: #fff;
+            font-weight: bold;
+            padding: 5px 8px;
+            border-radius: 50%;
+            font-size: 0.9em;
+        }
+        .overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 8px;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 0.9em;
+            overflow-y: auto;
+        }
+        .pelicula:hover .overlay {
+            opacity: 1;
+        }
+        .overlay h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #01b4e4;
+        }
+        .overlay p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
-    <h1>🎬 Mi Lista de Películas y Series</h1>
+    <h1>🎬 Mi Lista de Películas Favoritas</h1>
     <div id="lista"></div>
 
     <script>
@@ -30,8 +90,14 @@
                     div.className = "pelicula";
                     div.innerHTML = `
                         <a href="https://www.themoviedb.org/movie/${data.id}" target="_blank">
-                            <img src="https://image.tmdb.org/t/p/w200${data.poster_path}" alt="${data.title}">
+                            <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title}">
+                            <div class="rating">${data.vote_average.toFixed(1)}</div>
                             <p>${data.title}</p>
+                            <div class="overlay">
+                                <h3>${data.title}</h3>
+                                <p><strong>Estreno:</strong> ${data.release_date}</p>
+                                <p>${data.overview}</p>
+                            </div>
                         </a>
                     `;
                     document.getElementById("lista").appendChild(div);
@@ -39,5 +105,5 @@
         });
     </script>
 </body>
-
 </html>
+
