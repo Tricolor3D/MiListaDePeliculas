@@ -1,44 +1,4 @@
-    async function cargarGeneros(){
-      const resMovies = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
-      const resSeries = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
-      const dataMovies = await resMovies.json();
-      const dataSeries = await resSeries.json();
-      return {peliculas: dataMovies.genres, series: dataSeries.genres};
-    }
-
-    async function mostrarGeneros(){
-      modo="generos";
-      document.getElementById("tituloSeccion").textContent="Géneros";
-      document.getElementById("contenedor").innerHTML="";
-
-      const generos = await cargarGeneros();
-
-      // Mostrar géneros de películas
-      generos.peliculas.forEach(g=>{
-        const div = document.createElement("div");
-        div.className="pelicula";
-        div.innerHTML=`
-          <div style="cursor:pointer; background:#01b4e4; padding:20px; border-radius:8px;">
-            <p>${g.name}</p>
-          </div>`;
-        div.onclick = ()=>mostrarPorGenero(g.id,"movie");
-        document.getElementById("contenedor").appendChild(div);
-      });
-
-      // Mostrar géneros de series
-      generos.series.forEach(g=>{
-        const div = document.createElement("div");
-        div.className="pelicula";
-        div.innerHTML=`
-          <div style="cursor:pointer; background:#0288a7; padding:20px; border-radius:8px;">
-            <p>${g.name}</p>
-          </div>`;
-        div.onclick = ()=>mostrarPorGenero(g.id,"tv");
-        document.getElementById("contenedor").appendChild(div);
-      });
-    }
-
-    let resultadosGenero=[];
+let resultadosGenero=[];
 
     async function mostrarPorGenero(idGenero, tipo){
       modo="generos";
@@ -116,3 +76,4 @@
   </script>
 </body>
 </html>
+
