@@ -37,7 +37,7 @@
             position: absolute;
             bottom: 0; 
             left: 0;
-            transform: translate(-40%, -20%); /* subido 100% respecto al anterior */
+            transform: translate(-40%, -70%); /* subido 150% respecto al anterior */
             width: 48px;  /* reducido un 20% */
             height: 48px;
         }
@@ -56,7 +56,7 @@
         .progress {
             transition: stroke-dashoffset 1.5s ease;
         }
-        /* Popup apaisado con efecto slide up */
+        /* Popup apaisado con fade in */
         .popup {
             position: absolute;
             bottom: 0; left: 0;
@@ -65,8 +65,7 @@
             background: rgba(0,0,0,0.85);
             color: white;
             opacity: 0;
-            transform: translateY(100%); /* oculto abajo */
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.3s ease;
             border-radius: 8px;
             padding: 15px;
             box-sizing: border-box;
@@ -86,8 +85,7 @@
             font-weight: normal;
         }
         .pelicula:hover .popup {
-            opacity: 1;
-            transform: translateY(0); /* se desliza hacia arriba */
+            opacity: 1; /* solo fade in */
         }
     </style>
 </head>
