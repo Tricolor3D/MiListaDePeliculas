@@ -187,22 +187,43 @@
     }
 
     async function mostrarGeneros(){
-      modo="generos";
-      document.getElementById("tituloSeccion").textContent="Géneros";
-      document.getElementById("contenedor").innerHTML="";
-      const generos = await cargarGeneros();
+  modo="generos";
+  document.getElementById("tituloSeccion").textContent="Géneros";
+  document.getElementById("contenedor").innerHTML="";
+  const generos = await cargarGeneros();
+
+  // Filtrar solo los géneros que quieres
+  const generosFiltrados = generos.peliculas.concat(generos.series)
+    .filter(g => Object.keys(imagenesGeneros).includes(g.name));
+
+  generosFiltrados.forEach(g=>{
+    const div=document.createElement("div");
+    div.className="genero-card";
+    const img=imagenesGeneros[g.name];
+    div.style.backgroundImage=`url('${img}')`;
+    div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
+    div.onclick=()=>mostrarPorGenero(g.id, g.type || "movie");
+    document.getElementById("contenedor").appendChild(div);
+  });
+}
 
       // Diccionario de imágenes sugeridas por género
-      const imagenesGeneros = {
-        "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-        "Comedia":"https://image.tmdb.org/t/p/w500/6bCplVkhowCjTHXWv49UjRPns7.jpg",
-        "Drama":"https://image.tmdb.org/t/p/w500/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",
-        "Terror":"https://image.tmdb.org/t/p/w500/b9QZJb8s3kM2sI4zE2jD4z5sEJd.jpg",
-        "Romance":"https://image.tmdb.org/t/p/w500/6t7lKfYkQz9sQY2Z9VjA36TObgG.jpg",
-        "Ciencia ficción":"https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        "Animación":"https://image.tmdb.org/t/p/w500/udDclJoHjfjbEv8Jgvoyq7m6kzD.jpg",
-        "Documental":"https://image.tmdb.org/t/p/w500/3ZpFPfQkQ9h9t7VDaRao7IhiHBh.jpg"
-      };
+     const imagenesGeneros = {
+  "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",        // Avengers
+  "Aventura":"https://image.tmdb.org/t/p/w500/2l05cFWJacyIsTpsqSgH0wQXe4V.jpg",      // Indiana Jones
+  "Animación":"https://image.tmdb.org/t/p/w500/udDclJoHjfjbEv8Jgvoyq7m6kzD.jpg",     // Toy Story
+  "Comedia":"https://image.tmdb.org/t/p/w500/6bCplVkhowCjTHXWv49UjRPns7.jpg",        // The Mask
+  "Crimen":"https://image.tmdb.org/t/p/w500/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",        // The Godfather
+  "Ciencia ficción":"https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg", // The Matrix
+  "Documental":"https://image.tmdb.org/t/p/w500/3ZpFPfQkQ9h9t7VDaRao7IhiHBh.jpg",    // Free Solo
+  "Drama":"https://image.tmdb.org/t/p/w500/tuomPhY2UtuPTqqFnKMVHvSb724.jpg",         // Shawshank Redemption
+  "Música":"https://image.tmdb.org/t/p/w500/2CAL2433ZeIihfX1Hb2139CX0pW.jpg",        // La La Land
+  "Thriller":"https://image.tmdb.org/t/p/w500/5WJnxuw41sddupf8cwOxYftuvJG.jpg",      // Se7en
+  "Terror":"https://image.tmdb.org/t/p/w500/b9QZJb8s3kM2sI4zE2jD4z5sEJd.jpg",        // It
+  "Western":"https://image.tmdb.org/t/p/w500/4Yd3UuGzQkWzQ3QAtF5NCz7kZ4f.jpg"        // Django Unchained
+};
+
+
 
       // Películas
       generos.peliculas.forEach(g=>{
@@ -307,3 +328,4 @@
   </script>
 </body>
 </html>
+
