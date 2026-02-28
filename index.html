@@ -37,7 +37,7 @@
             position: absolute;
             bottom: 0; 
             left: 0;
-            transform: translate(-40%, -70%); /* subido 150% respecto al anterior */
+            transform: translate(-40%, -120%); /* subido 150% */
             width: 48px;  /* reducido un 20% */
             height: 48px;
         }
@@ -56,13 +56,14 @@
         .progress {
             transition: stroke-dashoffset 1.5s ease;
         }
-        /* Popup apaisado con fade in */
+        /* Popup apaisado con blur */
         .popup {
             position: absolute;
-            bottom: 0; left: 0;
+            bottom: 30px; left: 0; /* apoyado en 30px desde abajo */
             width: 250%;   /* mucho más ancho */
-            height: 50%;   /* mitad de la altura del póster */
-            background: rgba(0,0,0,0.85);
+            height: 60%;   /* más alto */
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px); /* efecto blur */
             color: white;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -85,12 +86,12 @@
             font-weight: normal;
         }
         .pelicula:hover .popup {
-            opacity: 1; /* solo fade in */
+            opacity: 1; /* fade in elegante */
         }
     </style>
 </head>
 <body>
-    <h1>🎬 Mi Lista de Películas Favoritas</h1>
+    <h1>🎬 Mi Lista de Películas y Series</h1>
     <div id="lista"></div>
 
     <script>
