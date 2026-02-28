@@ -5,7 +5,7 @@
     <title>Mi Lista de Películas</title>
     <style>
         body { 
-            font-family: "Source Sans Pro", Arial, sans-serif; 
+            font-family: "Segoe UI", "Source Sans Pro", Arial, sans-serif; 
             background: #0d253f;
             margin: 20px; 
             color: white;
@@ -29,15 +29,15 @@
         }
         .pelicula p { 
             margin-top: 8px; 
-            font-weight: bold; 
-            font-size: 1.1em; 
+            font-size: 1.05em; 
             color: white;
+            font-weight: normal; /* más elegante */
         }
         .rating-circle {
             position: absolute;
             bottom: 0; 
             left: 0;
-            transform: translate(-30%, 30%); /* mitad dentro, mitad fuera */
+            transform: translate(-40%, 40%); /* mitad dentro, mitad fuera */
             width: 60px;
             height: 60px;
         }
@@ -56,28 +56,31 @@
         .progress {
             transition: stroke-dashoffset 1.5s ease;
         }
-        /* Popup superpuesto al póster */
+        /* Popup apaisado */
         .popup {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            bottom: 0; left: 0;
+            width: 100%; 
+            height: 40%; /* más ancho que alto */
             background: rgba(0,0,0,0.85);
             color: white;
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 8px;
+            border-radius: 0 0 8px 8px;
             padding: 10px;
             box-sizing: border-box;
-            font-size: 0.9em;
+            font-size: 0.85em;
             overflow-y: auto;
         }
         .popup h3 {
             margin: 0;
             color: #01b4e4;
-            font-size: 1.1em;
+            font-size: 1em;
+            font-weight: normal;
         }
         .popup p {
             margin: 5px 0;
+            font-weight: normal;
         }
         .pelicula:hover .popup {
             opacity: 1;
@@ -90,7 +93,21 @@
 
     <script>
         const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
-        const ids = [238, 603, 597, 496243]; // El Padrino, Matrix, Titanic, Parasite
+        // 12 películas con distintas calificaciones
+        const ids = [
+            238,    // El Padrino
+            603,    // Matrix
+            597,    // Titanic
+            496243, // Parasite
+            27205,  // Inception
+            155,    // The Dark Knight
+            680,    // Pulp Fiction
+            122,    // El Señor de los Anillos: La Comunidad del Anillo
+            13,     // Forrest Gump
+            550,    // Fight Club
+            424,    // Schindler's List
+            862     // Toy Story
+        ];
 
         ids.forEach(id => {
             fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`)
