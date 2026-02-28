@@ -26,6 +26,38 @@
     .paginacion { text-align:center; margin:20px;}
     .paginacion button { background:#01b4e4; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; margin:0 10px;}
     .paginacion button:hover { background:#0288a7;}
+
+    /* Tarjetas de géneros */
+    .genero-card {
+      width:200px;
+      height:300px;
+      margin:15px;
+      border-radius:10px;
+      background-size:cover;
+      background-position:center;
+      position:relative;
+      cursor:pointer;
+      box-shadow:0 4px 10px rgba(0,0,0,0.6);
+      transition:transform 0.3s ease;
+    }
+    .genero-card:hover {
+      transform:scale(1.05);
+    }
+    .genero-card .overlay {
+      position:absolute;
+      bottom:0;
+      width:100%;
+      background:rgba(0,0,0,0.7);
+      text-align:center;
+      padding:10px;
+      border-radius:0 0 10px 10px;
+    }
+    .genero-card p {
+      margin:0;
+      color:#01b4e4;
+      font-weight:bold;
+      font-size:1.2em;
+    }
   </style>
 </head>
 <body>
@@ -160,18 +192,36 @@
       document.getElementById("contenedor").innerHTML="";
       const generos = await cargarGeneros();
 
+      // Diccionario de imágenes sugeridas por género
+      const imagenesGeneros = {
+        "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+        "Comedia":"https://image.tmdb.org/t/p/w500/6bCplVkhowCjTHXWv49UjRPns7.jpg",
+        "Drama":"https://image.tmdb.org/t/p/w500/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",
+        "Terror":"https://image.tmdb.org/t/p/w500/b9QZJb8s3kM2sI4zE2jD4z5sEJd.jpg",
+        "Romance":"https://image.tmdb.org/t/p/w500/6t7lKfYkQz9sQY2Z9VjA36TObgG.jpg",
+        "Ciencia ficción":"https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "Animación":"https://image.tmdb.org/t/p/w500/udDclJoHjfjbEv8Jgvoyq7m6kzD.jpg",
+        "Documental":"https://image.tmdb.org/t/p/w500/3ZpFPfQkQ9h9t7VDaRao7IhiHBh.jpg"
+      };
+
+      // Películas
       generos.peliculas.forEach(g=>{
         const div=document.createElement("div");
-        div.className="pelicula";
-        div.innerHTML=`<div style="cursor:pointer; background:#01b4e4; padding:20px; border-radius:8px;"><p>${g.name}</p></div>`;
+        div.className="genero-card";
+        const img=imagenesGeneros[g.name] || `https://via.placeholder.com/200x300?text=${g.name}`;
+        div.style.backgroundImage=`url('${img}')`;
+        div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
         div.onclick=()=>mostrarPorGenero(g.id,"movie");
         document.getElementById("contenedor").appendChild(div);
       });
 
+      // Series
       generos.series.forEach(g=>{
         const div=document.createElement("div");
-        div.className="pelicula";
-        div.innerHTML=`<div style="cursor:pointer; background:#0288a7; padding:20px; border-radius:8px;"><p>${g.name}</p></div>`;
+        div.className="genero-card";
+        const img=imagenesGeneros[g.name] || `https://via.placeholder.com/200x300?text=${g.name}`;
+        div.style.backgroundImage=`url('${img}')`;
+        div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
         div.onclick=()=>mostrarPorGenero(g.id,"tv");
         document.getElementById("contenedor").appendChild(div);
       });
@@ -257,4 +307,3 @@
   </script>
 </body>
 </html>
-	
