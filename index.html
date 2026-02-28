@@ -99,10 +99,31 @@
         .pelicula:hover .popup {
             opacity: 1;
         }
+        /* Filtro */
+        .filtro {
+            text-align: right;
+            margin: 20px;
+        }
+        .filtro label {
+            color: #01b4e4;
+            font-weight: bold;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Mi Lista de Películas y Series</h1>
+
+    <div class="filtro">
+        <label for="filtro">Filtro:</label>
+        <select id="filtro">
+            <option value="none">Sin filtro</option>
+            <option value="alfabetico">Alfabético</option>
+            <option value="anio">Año</option>
+            <option value="genero">Género (próximamente)</option>
+            <option value="director">Director (próximamente)</option>
+        </select>
+    </div>
 
     <h2>Películas</h2>
     <div id="peliculas" class="contenedor"></div>
@@ -113,15 +134,11 @@
     <script>
         const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
 
-        // 13 películas
-        const movieIds = [
-            238, 603, 597, 496243, 27205, 155, 680, 122, 13, 550, 424, 862, 314
-        ];
+        const movieIds = [238,603,597,496243,27205,155,680,122,13,550,424,862,314];
+        const seriesIds = [1399,60735,1668,1412,456,4629,66732,1100];
 
-        // 8 series
-        const seriesIds = [
-            1399, 60735, 1668, 1412, 456, 4629, 66732, 1100
-        ];
+        let peliculasData = [];
+        let seriesData = [];
 
         async function getDirector(id) {
             const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`);
@@ -137,13 +154,9 @@
             const offset = circumference - (rating / 100) * circumference;
 
             let color;
-            if (rating >= 70) {
-                color = "#21d07a"; 
-            } else if (rating >= 40) {
-                color = "#d2d531"; 
-            } else {
-                color = "#db2360"; 
-            }
+            if (rating >= 70) color = "#21d07a";
+            else if (rating >= 40) color = "#d2d531";
+            else color = "#db2360";
 
             const genres = data.genres.map(g => g.name).join(", ");
 
@@ -177,20 +190,32 @@
             }, 100);
         }
 
-        // Render películas con director
+        // Render películas
         movieIds.forEach(async id => {
             const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`);
             const data = await res.json();
             const director = await getDirector(id);
+            peliculasData.push({...data, director});
             renderItem(data, "movie", "peliculas", director);
         });
 
-        // Render series (sin director, solo géneros)
+        // Render series
         seriesIds.forEach(async id => {
             const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`);
             const data = await res.json();
+            seriesData.push(data);
             renderItem(data, "tv", "series");
         });
-    </script>
-</body>
-</html>
+
+        // Funciones de filtro
+        function ordenarPorTitulo(lista, contenedorId, type) {
+            document.getElementById(contenedorId).innerHTML = "";
+            lista.sort((a,b) => (a.title || a.name).localeCompare(b.title || b.name))
+                .forEach(item => renderItem(item, type, contenedorId, item.director || ""));
+        }
+
+        function ordenarPorAnio(lista, contenedorId, type) {
+            document.getElementById(contenedorId).innerHTML = "";
+            lista.sort((a,b) => (a.release_date || a.first_air_date).localeCompare(b.release_date || b.first_air_date))
+                .forEach(item => renderItem(item, type, contenedorId, item.director || ""));
+        }
