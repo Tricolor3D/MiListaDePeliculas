@@ -60,7 +60,7 @@
     let itemsPorPagina = 20;
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
-	    async function getDirector(id) {
+	async function getDirector(id) {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`);
       const data = await res.json();
       const director = data.crew.find(c => c.job === "Director");
@@ -122,7 +122,7 @@
       lista.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
       lista.slice(0,20).forEach(item=>renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor",item.director||""));
     }
-	    async function cargarGeneros(){
+async function cargarGeneros(){
       const resMovies = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
       const resSeries = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
       const dataMovies = await resMovies.json();
@@ -152,8 +152,7 @@
         document.getElementById("contenedor").appendChild(div);
       });
     }
-
-        let resultadosGenero=[];
+	let resultadosGenero=[];
 
     async function mostrarPorGenero(idGenero, tipo){
       modo="generos";
