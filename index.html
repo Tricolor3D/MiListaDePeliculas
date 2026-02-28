@@ -208,17 +208,25 @@
         "Western":"https://image.tmdb.org/t/p/w500/4Yd3UuGzQkWzQ3QAtF5NCz7kZ4f.jpg"
       };
 
-      // Filtrar solo los géneros seleccionados
-      const generosFiltrados = generos.peliculas.concat(generos.series)
-        .filter(g => Object.keys(imagenesGeneros).includes(g.name));
+      // Filtrar y eliminar duplicados
+      const todosGeneros = [...generos.peliculas, ...generos.series];
+      const generosUnicos = [];
+      const nombresIncluidos = new Set();
 
-      generosFiltrados.forEach(g=>{
+      todosGeneros.forEach(g=>{
+        if(Object.keys(imagenesGeneros).includes(g.name) && !nombresIncluidos.has(g.name)){
+          nombresIncluidos.add(g.name);
+          generosUnicos.push(g);
+        }
+      });
+
+      generosUnicos.forEach(g=>{
         const div=document.createElement("div");
         div.className="genero-card";
         const img=imagenesGeneros[g.name];
         div.style.backgroundImage=`url('${img}')`;
         div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
-        div.onclick=()=>mostrarPorGenero(g.id, g.type || "movie");
+        div.onclick=()=>mostrarPorGenero(g.id,"movie");
         document.getElementById("contenedor").appendChild(div);
       });
     }
