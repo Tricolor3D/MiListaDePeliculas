@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Lista de Películas</title>
+    <title>Mi Lista de Películas y Series</title>
     <style>
         body { 
             font-family: "Segoe UI", "Source Sans Pro", Arial, sans-serif; 
@@ -37,8 +37,8 @@
             position: absolute;
             bottom: 0; 
             left: 0;
-            transform: translate(-40%, -120%); /* subido 150% */
-            width: 48px;  /* reducido un 20% */
+            transform: translate(-40%, -40%); /* bajado respecto al anterior */
+            width: 48px;  
             height: 48px;
         }
         .rating-circle svg {
@@ -60,10 +60,10 @@
         .popup {
             position: absolute;
             bottom: 30px; left: 0; /* apoyado en 30px desde abajo */
-            width: 250%;   /* mucho más ancho */
-            height: 60%;   /* más alto */
+            width: 250%;   
+            height: 60%;   
             background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(8px); /* efecto blur */
+            backdrop-filter: blur(8px);
             color: white;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -91,13 +91,13 @@
     </style>
 </head>
 <body>
-    <h1>🎬 Mi Lista de Películas y Series</h1>
+    <h1>🎬 Mi Lista de Películas y Series Favoritas</h1>
     <div id="lista"></div>
 
     <script>
         const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
-        // 13 películas con distintas calificaciones
-        const ids = [
+        // 13 películas
+        const movieIds = [
             238,    // El Padrino
             603,    // Matrix
             597,    // Titanic
@@ -113,51 +113,73 @@
             314     // Catwoman (calificación baja <4)
         ];
 
-        ids.forEach(id => {
+        // 8 series
+        const seriesIds = [
+            1399,   // Game of Thrones
+            60735,  // The Flash
+            1668,   // Friends
+            1412,   // Arrow
+            456,    // The Simpsons
+            4629,   // Lost
+            66732,  // Stranger Things
+            1100    // Batman: The Animated Series
+        ];
+
+        function renderItem(data, type="movie") {
+            const rating = data.vote_average * 10;
+            const radius = 20;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (rating / 100) * circumference;
+
+            let color;
+            if (rating >= 70) {
+                color = "#21d07a"; // verde
+            } else if (rating >= 40) {
+                color = "#d2d531"; // amarillo
+            } else {
+                color = "#db2360"; // rojo
+            }
+
+            const div = document.createElement("div");
+            div.className = "pelicula";
+            div.innerHTML = `
+                <a href="https://www.themoviedb.org/${type}/${data.id}" target="_blank">
+                    <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title || data.name}">
+                    <p>${data.title || data.name}</p>
+                    <div class="rating-circle">
+                        <svg width="48" height="48">
+                            <circle cx="24" cy="24" r="${radius}" stroke="#444" stroke-width="3" fill="black"/>
+                            <circle class="progress" cx="24" cy="24" r="${radius}" stroke="${color}" stroke-width="3" fill="transparent"
+                                stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}" />
+                        </svg>
+                        <div class="rating-text">${data.vote_average.toFixed(1)}</div>
+                    </div>
+                    <div class="popup">
+                        <h3>${data.title || data.name}</h3>
+                        <p><strong>Estreno:</strong> ${data.release_date || data.first_air_date}</p>
+                        <p>${data.overview}</p>
+                    </div>
+                </a>
+            `;
+            document.getElementById("lista").appendChild(div);
+
+            setTimeout(() => {
+                div.querySelector(".progress").setAttribute("stroke-dashoffset", offset);
+            }, 100);
+        }
+
+        // Render películas
+        movieIds.forEach(id => {
             fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`)
                 .then(res => res.json())
-                .then(data => {
-                    const rating = data.vote_average * 10;
-                    const radius = 20; // reducido un 20%
-                    const circumference = 2 * Math.PI * radius;
-                    const offset = circumference - (rating / 100) * circumference;
+                .then(data => renderItem(data, "movie"));
+        });
 
-                    let color;
-                    if (rating >= 70) {
-                        color = "#21d07a"; // verde
-                    } else if (rating >= 40) {
-                        color = "#d2d531"; // amarillo
-                    } else {
-                        color = "#db2360"; // rojo
-                    }
-
-                    const div = document.createElement("div");
-                    div.className = "pelicula";
-                    div.innerHTML = `
-                        <a href="https://www.themoviedb.org/movie/${data.id}" target="_blank">
-                            <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title}">
-                            <p>${data.title}</p>
-                            <div class="rating-circle">
-                                <svg width="48" height="48">
-                                    <circle cx="24" cy="24" r="${radius}" stroke="#444" stroke-width="3" fill="black"/>
-                                    <circle class="progress" cx="24" cy="24" r="${radius}" stroke="${color}" stroke-width="3" fill="transparent"
-                                        stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}" />
-                                </svg>
-                                <div class="rating-text">${data.vote_average.toFixed(1)}</div>
-                            </div>
-                            <div class="popup">
-                                <h3>${data.title}</h3>
-                                <p><strong>Estreno:</strong> ${data.release_date}</p>
-                                <p>${data.overview}</p>
-                            </div>
-                        </a>
-                    `;
-                    document.getElementById("lista").appendChild(div);
-
-                    setTimeout(() => {
-                        div.querySelector(".progress").setAttribute("stroke-dashoffset", offset);
-                    }, 100);
-                });
+        // Render series
+        seriesIds.forEach(id => {
+            fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`)
+                .then(res => res.json())
+                .then(data => renderItem(data, "tv"));
         });
     </script>
 </body>
