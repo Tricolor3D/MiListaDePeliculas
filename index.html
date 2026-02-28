@@ -16,23 +16,24 @@
     .rating-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.8em; font-weight:bold; color:white;}
     .progress { transition:stroke-dashoffset 1.5s ease;}
     .popup { 
-      position:absolute; 
-      bottom:30%; left:40%; 
-      transform:translateX(-50%); 
-      width:250%; height:60%; 
-      background:rgba(0,0,0,0.85); 
-      backdrop-filter:blur(8px);
-      color:white; 
-      opacity:0; 
-      transition:opacity 0.3s ease; 
-      border-radius:8px; 
-      padding:10px; 
-      box-sizing:border-box; 
-      font-size:0.9em; 
-      overflow-y:auto; 
-      z-index:1000;
-    }
-    .pelicula:hover .popup { opacity:1;}
+  position:absolute; 
+  bottom:30%; 
+  left:0;              /* se apoya en el borde izquierdo del póster */
+  width:250%; 
+  height:60%; 
+  background:rgba(0,0,0,0.85); 
+  backdrop-filter:blur(8px);
+  color:white; 
+  opacity:0; 
+  transition:opacity 0.3s ease; 
+  border-radius:8px; 
+  padding:10px; 
+  box-sizing:border-box; 
+  font-size:0.9em; 
+  overflow-y:auto; 
+  z-index:1000;
+}
+.pelicula:hover .popup { opacity:1; }
     .popup h3 { margin:0; color:#01b4e4; font-size:1em; font-weight:normal;}
     .popup p { margin:2px 0; font-weight:normal;}
     .filtro { text-align:right; margin:20px;}
@@ -157,3 +158,4 @@
   </script>
 </body>
 </html>
+
