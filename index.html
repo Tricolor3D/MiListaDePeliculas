@@ -56,20 +56,20 @@
         .progress {
             transition: stroke-dashoffset 1.5s ease;
         }
-        /* Popup estilo tooltip */
+        /* Popup superpuesto al póster */
         .popup {
-            display: none;
             position: absolute;
-            bottom: 100%; /* aparece arriba del póster */
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.9);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
             color: white;
-            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
             border-radius: 8px;
-            width: 250px;
-            text-align: left;
-            z-index: 10;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 0.9em;
+            overflow-y: auto;
         }
         .popup h3 {
             margin: 0;
@@ -78,10 +78,9 @@
         }
         .popup p {
             margin: 5px 0;
-            font-size: 0.9em;
         }
         .pelicula:hover .popup {
-            display: block;
+            opacity: 1;
         }
     </style>
 </head>
@@ -98,7 +97,7 @@
                 .then(res => res.json())
                 .then(data => {
                     const rating = data.vote_average * 10;
-                    const radius = 26; // más fino
+                    const radius = 26;
                     const circumference = 2 * Math.PI * radius;
                     const offset = circumference - (rating / 100) * circumference;
 
