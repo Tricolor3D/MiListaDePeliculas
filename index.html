@@ -50,7 +50,7 @@
   </div>
 
   <script>
-    const apiKey = "TU_API_KEY";  
+    const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
     const movieIds = [238,603,597,496243,27205,155,680,122,13,550,424,862,314]; 
     const seriesIds = [1399,60735,1668,1412,456,4629,66732,1100]; 
 
@@ -60,7 +60,7 @@
     let itemsPorPagina = 20;
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
-	async function getDirector(id) {
+	    async function getDirector(id) {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`);
       const data = await res.json();
       const director = data.crew.find(c => c.job === "Director");
@@ -78,9 +78,27 @@
       const div = document.createElement("div");
       div.className="pelicula";
       div.innerHTML=`
-        <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title||data.name}">
-        <p>${data.title||data.name}</p>`;
+        <a href="https://www.themoviedb.org/${type}/${data.id}" target="_blank">
+          <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title||data.name}">
+          <p>${data.title||data.name}</p>
+          <div class="rating-circle">
+            <svg width="48" height="48">
+              <circle cx="24" cy="24" r="${radius}" stroke="#444" stroke-width="3" fill="black"/>
+              <circle class="progress" cx="24" cy="24" r="${radius}" stroke="${color}" stroke-width="3" fill="transparent"
+                stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"/>
+            </svg>
+            <div class="rating-text">${data.vote_average.toFixed(1)}</div>
+          </div>
+          <div class="popup">
+            <h3>${data.title||data.name}</h3>
+            <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
+            ${type==="movie"?`<p><strong>Director:</strong> ${director}</p>`:""}
+            <p><strong>Género:</strong> ${genres}</p>
+            <p>${data.overview}</p>
+          </div>
+        </a>`;
       document.getElementById(containerId).appendChild(div);
+      setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
     }
 
     async function cargarPeliculas() {
@@ -101,15 +119,18 @@
         seriesData.push(data);
       }
     }
-
-    function mostrarPeliculas(){
-      modo="peliculas"; modoAnterior="peliculas"; pagina=1;
+	    function mostrarPeliculas(){
+      modo="peliculas"; 
+      modoAnterior="peliculas"; 
+      pagina=1;
       document.getElementById("tituloSeccion").textContent="Películas";
       mostrarPagina();
     }
 
     function mostrarSeries(){
-      modo="series"; modoAnterior="series"; pagina=1;
+      modo="series"; 
+      modoAnterior="series"; 
+      pagina=1;
       document.getElementById("tituloSeccion").textContent="Series";
       mostrarPagina();
     }
@@ -120,9 +141,12 @@
       document.getElementById("contenedor").innerHTML="";
       let lista = (modoAnterior==="series"?seriesData:peliculasData);
       lista.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
-      lista.slice(0,20).forEach(item=>renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor",item.director||""));
+      lista.slice(0,20).forEach(item=>{
+        renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor",item.director||"");
+      });
     }
-async function cargarGeneros(){
+
+    async function cargarGeneros(){
       const resMovies = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
       const resSeries = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
       const dataMovies = await resMovies.json();
@@ -152,14 +176,18 @@ async function cargarGeneros(){
         document.getElementById("contenedor").appendChild(div);
       });
     }
-	let resultadosGenero=[];
 
-    async function mostrarPorGenero(idGenero, tipo){
+    let resultadosGenero=[];
+    let generoActualId=null;
+    let generoActualTipo=null;
+	    async function mostrarPorGenero(idGenero, tipo){
       modo="generos";
       pagina=1;
+      generoActualId=idGenero;
+      generoActualTipo=tipo;
       document.getElementById("tituloSeccion").textContent="Género seleccionado";
       await cargarPorGenero(idGenero,tipo);
-      mostrarPaginaGenero(idGenero,tipo);
+      mostrarPaginaGenero();
     }
 
     async function cargarPorGenero(idGenero,tipo){
@@ -168,14 +196,14 @@ async function cargarGeneros(){
       resultadosGenero = data.results;
     }
 
-    function mostrarPaginaGenero(idGenero,tipo){
+    function mostrarPaginaGenero(){
       document.getElementById("contenedor").innerHTML="";
       let inicio = (pagina-1)*30;
       let fin = inicio+30;
       let paginaItems = resultadosGenero.slice(inicio,fin);
 
       paginaItems.forEach(item=>{
-        renderItem(item,tipo,"contenedor");
+        renderItem(item,generoActualTipo,"contenedor");
       });
 
       document.getElementById("paginaActual").textContent=pagina;
@@ -220,8 +248,7 @@ async function cargarGeneros(){
 
       document.getElementById("paginaActual").textContent=pagina;
     }
-
-    // Inicialización
+	    // Inicialización
     (async function(){
       await cargarPeliculas();
       await cargarSeries();
@@ -230,3 +257,4 @@ async function cargarGeneros(){
   </script>
 </body>
 </html>
+	
