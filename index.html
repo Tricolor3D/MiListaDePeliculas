@@ -6,8 +6,11 @@
   <style>
     body { font-family:"Segoe UI",Arial,sans-serif; background:#0d253f; color:white; margin:20px;}
     h1 { text-align:center; color:#01b4e4; font-size:2.5em;}
-    h2 { color:#01b4e4; font-size:2em; margin-top:40px;}
-    .contenedor { display:flex; flex-wrap:wrap;}
+    .menu { display:flex; justify-content:center; gap:20px; margin:20px 0;}
+    .menu button { background:#01b4e4; border:none; padding:10px 20px; border-radius:5px; color:white; cursor:pointer; font-weight:bold;}
+    .menu button:hover { background:#0288a7;}
+    h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
+    .contenedor { display:flex; flex-wrap:wrap; justify-content:center;}
     .pelicula { display:inline-block; margin:20px; text-align:center; width:200px; position:relative;}
     .pelicula img { width:100%; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.5);}
     .pelicula p { margin-top:8px; font-size:1.05em; color:white; font-weight:normal;}
@@ -34,35 +37,43 @@
     .pelicula:hover .popup { opacity:1;}
     .popup h3 { margin:0; color:#01b4e4; font-size:1em; font-weight:normal;}
     .popup p { margin:2px 0; font-weight:normal;}
-    .filtro { text-align:right; margin:20px;}
-    .filtro label { color:#01b4e4; font-weight:bold; margin-right:10px;}
+    .paginacion { text-align:center; margin:20px;}
+    .paginacion button { background:#01b4e4; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; margin:0 10px;}
+    .paginacion button:hover { background:#0288a7;}
   </style>
 </head>
 <body>
   <h1>Mi Lista de Películas y Series</h1>
 
-  <div class="filtro">
-    <label for="filtro">Filtro:</label>
-    <select id="filtro">
-      <option value="none">Sin filtro</option>
-      <option value="alfabetico">Alfabético</option>
-      <option value="anio">Año</option>
-    </select>
+  <!-- Menú superior -->
+  <div class="menu">
+    <button onclick="mostrarPeliculas()">Películas</button>
+    <button onclick="mostrarSeries()">Series</button>
+    <button onclick="mostrarGeneros()">Géneros</button>
+    <button onclick="mostrarRecientes()">Recientes</button>
   </div>
 
-  <h2>Películas</h2>
-  <div id="peliculas" class="contenedor"></div>
+  <h2 id="tituloSeccion">Películas</h2>
+  <div id="contenedor" class="contenedor"></div>
 
-  <h2>Series</h2>
-  <div id="series" class="contenedor"></div>
+  <!-- Paginación -->
+  <div class="paginacion">
+    <button onclick="paginaAnterior()">Anterior</button>
+    <span id="paginaActual">1</span>
+    <button onclick="paginaSiguiente()">Siguiente</button>
+  </div>
 
   <script>
     const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
-    const movieIds = [238,603,597,496243,27205,155,680,122,13,550,424,862,314];
-    const seriesIds = [1399,60735,1668,1412,456,4629,66732,1100];
+    const movieIds = [238,603,597,496243,27205,155,680,122,13,550,424,862,314]; // ejemplo
+    const seriesIds = [1399,60735,1668,1412,456,4629,66732,1100]; // ejemplo
 
     let peliculasData = [];
     let seriesData = [];
+    let pagina = 1;
+    let itemsPorPagina = 20;
+    let modo = "peliculas"; // "peliculas", "series", "generos", "recientes"
+    let modoAnterior = "peliculas";
 
     async function getDirector(id) {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`);
@@ -105,56 +116,87 @@
       setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
     }
 
-    // Cargar películas
-    (async function(){
+    async function cargarPeliculas() {
+      peliculasData = [];
       for(let id of movieIds){
         const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`);
         const data = await res.json();
         const director = await getDirector(id);
         peliculasData.push({...data,director});
-        renderItem(data,"movie","peliculas",director);
       }
-    })();
+    }
 
-    // Cargar series
-    (async function(){
+    async function cargarSeries() {
+      seriesData = [];
       for(let id of seriesIds){
         const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`);
         const data = await res.json();
         seriesData.push(data);
-        renderItem(data,"tv","series");
       }
+    }
+
+    function mostrarPeliculas(){
+      modo="peliculas"; modoAnterior="peliculas"; pagina=1;
+      document.getElementById("tituloSeccion").textContent="Películas";
+      mostrarPagina();
+    }
+
+    function mostrarSeries(){
+      modo="series"; modoAnterior="series"; pagina=1;
+      document.getElementById("tituloSeccion").textContent="Series";
+      mostrarPagina();
+    }
+
+    function mostrarGeneros(){
+      modo="generos";
+      document.getElementById("tituloSeccion").textContent="Géneros";
+      document.getElementById("contenedor").innerHTML="<p>Lista de géneros aquí...</p>";
+    }
+
+    function mostrarRecientes(){
+      modo="recientes";
+      document.getElementById("tituloSeccion").textContent="Recientes";
+      document.getElementById("contenedor").innerHTML="";
+      let lista = (modoAnterior==="series"?seriesData:peliculasData);
+      lista.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
+      lista.slice(0,20).forEach(item=>renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor",item.director||""));
+    }
+
+    function mostrarPagina(){
+      document.getElementById("contenedor").innerHTML="";
+      let lista = (modo==="peliculas"?peliculasData:seriesData);
+      let inicio = (pagina-1)*itemsPorPagina;
+      let fin = inicio + itemsPorPagina;
+      let paginaItems = lista.slice(inicio, fin);
+
+      paginaItems.forEach(item=>{
+        renderItem(item, modo==="series"?"tv":"movie", "contenedor", item.director||"");
+      });
+
+      document.getElementById("paginaActual").textContent = pagina;
+    }
+
+    function paginaAnterior(){
+      if(pagina>1){
+        pagina--;
+        mostrarPagina();
+      }
+    }
+
+    function paginaSiguiente(){
+      let lista = (modo==="peliculas"?peliculasData:seriesData);
+      if(pagina*itemsPorPagina < lista.length){
+        pagina++;
+        mostrarPagina();
+      }
+    }
+
+    // Inicialización: cargar películas y series al inicio
+    (async function(){
+      await cargarPeliculas();
+      await cargarSeries();
+      mostrarPeliculas(); // arranca mostrando películas
     })();
-
-    // Funciones de filtro
-    function ordenarPorTitulo(lista, contenedorId, type){
-      document.getElementById(contenedorId).innerHTML="";
-      lista.sort((a,b)=>(a.title||a.name).localeCompare(b.title||b.name))
-           .forEach(item=>renderItem(item,type,contenedorId,item.director||""));
-    }
-    function ordenarPorAnio(lista, contenedorId, type){
-      document.getElementById(contenedorId).innerHTML="";
-      lista.sort((a,b)=>(a.release_date||a.first_air_date).localeCompare(b.release_date||b.first_air_date))
-           .forEach(item=>renderItem(item,type,contenedorId,item.director||""));
-    }
-
-    // Listener del filtro
-    document.getElementById("filtro").addEventListener("change",function(){
-      const valor=this.value;
-      if(valor==="alfabetico"){
-        ordenarPorTitulo(peliculasData,"peliculas","movie");
-        ordenarPorTitulo(seriesData,"series","tv");
-      } else if(valor==="anio"){
-        ordenarPorAnio(peliculasData,"peliculas","movie");
-        ordenarPorAnio(seriesData,"series","tv");
-      } else {
-        // Sin filtro: volver a mostrar todo
-        document.getElementById("peliculas").innerHTML="";
-        peliculasData.forEach(item=>renderItem(item,"movie","peliculas",item.director||""));
-        document.getElementById("series").innerHTML="";
-        seriesData.forEach(item=>renderItem(item,"tv","series"));
-      }
-    });
   </script>
 </body>
 </html>
