@@ -29,8 +29,6 @@
 
   <script>
     const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
-    const movieIds = [238,603,597,496243,27205,155,680,122,13,550,424,862,314]; 
-    const seriesIds = [1399,60735,1668,1412,456,4629,66732,1100]; 
 
     let peliculasData = [];
     let seriesData = [];
@@ -38,13 +36,28 @@
     let itemsPorPagina = 20;
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
-	    async function getDirector(id) {
+
+    // Nueva función para cargar IDs desde archivos .txt
+    async function cargarIdsDesdeArchivo(ruta) {
+      const resp = await fetch(ruta);
+      const texto = await resp.text();
+      return texto.split("\n")
+                  .map(linea => linea.trim())
+                  .filter(linea => linea && !linea.includes("NO ENCONTRADO"))
+                  .map(linea => {
+                    const partes = linea.split("—");
+                    return partes[1]?.trim();
+                  });
+    }
+	    // Obtener director de una película
+    async function getDirector(id) {
       const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`);
       const data = await res.json();
       const director = data.crew.find(c => c.job === "Director");
       return director ? director.name : "Desconocido";
     }
 
+    // Renderizar tarjeta de película/serie
     function renderItem(data, type, containerId, director="") {
       const rating = data.vote_average * 10;
       const radius = 20;
@@ -79,25 +92,30 @@
       setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
     }
 
+    // Cargar películas desde archivo de IDs
     async function cargarPeliculas() {
       peliculasData = [];
-      for(let id of movieIds){
+      const movieIds = await cargarIdsDesdeArchivo("peliculas_con_ids.txt");
+      for (let id of movieIds) {
         const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`);
         const data = await res.json();
         const director = await getDirector(id);
-        peliculasData.push({...data,director});
+        peliculasData.push({...data, director});
       }
     }
 
+    // Cargar series desde archivo de IDs
     async function cargarSeries() {
       seriesData = [];
-      for(let id of seriesIds){
+      const seriesIds = await cargarIdsDesdeArchivo("series_con_ids.txt");
+      for (let id of seriesIds) {
         const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`);
         const data = await res.json();
         seriesData.push(data);
       }
     }
-	    function mostrarPeliculas(){
+	    // Mostrar películas
+    function mostrarPeliculas(){
       modo="peliculas"; 
       modoAnterior="peliculas"; 
       pagina=1;
@@ -105,6 +123,7 @@
       mostrarPagina();
     }
 
+    // Mostrar series
     function mostrarSeries(){
       modo="series"; 
       modoAnterior="series"; 
@@ -113,6 +132,7 @@
       mostrarPagina();
     }
 
+    // Mostrar recientes
     function mostrarRecientes(){
       modo="recientes";
       document.getElementById("tituloSeccion").textContent="Recientes";
@@ -124,6 +144,7 @@
       });
     }
 
+    // Cargar géneros
     async function cargarGeneros(){
       const resMovies = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
       const resSeries = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
@@ -132,6 +153,7 @@
       return {peliculas: dataMovies.genres, series: dataSeries.genres};
     }
 
+    // Mostrar géneros
     async function mostrarGeneros(){
       modo="generos";
       document.getElementById("tituloSeccion").textContent="Géneros";
@@ -180,7 +202,8 @@
     let resultadosGenero=[];
     let generoActualId=null;
     let generoActualTipo=null;
-	    async function mostrarPorGenero(idGenero, tipo){
+
+    async function mostrarPorGenero(idGenero, tipo){
       modo="generos";
       pagina=1;
       generoActualId=idGenero;
@@ -208,7 +231,7 @@
 
       document.getElementById("paginaActual").textContent=pagina;
     }
-
+	    // Paginación anterior
     function paginaAnterior(){
       if(pagina>1){
         pagina--;
@@ -220,6 +243,7 @@
       }
     }
 
+    // Paginación siguiente
     function paginaSiguiente(){
       if(modo==="generos"){
         if(pagina*30 < resultadosGenero.length){
@@ -235,6 +259,7 @@
       }
     }
 
+    // Mostrar página actual (películas o series)
     function mostrarPagina(){
       document.getElementById("contenedor").innerHTML="";
       let lista = (modo==="peliculas"?peliculasData:seriesData);
