@@ -6,13 +6,13 @@
     <style>
         body { 
             font-family: "Source Sans Pro", Arial, sans-serif; 
-            background: #0d253f; /* azul oscuro TMDB */
+            background: #0d253f;
             margin: 20px; 
             color: white;
         }
         h1 { 
             text-align: center; 
-            color: #01b4e4; /* celeste TMDB */
+            color: #01b4e4;
             font-size: 2.5em;
         }
         .pelicula { 
@@ -31,17 +31,18 @@
             margin-top: 8px; 
             font-weight: bold; 
             font-size: 1.1em; 
-            color: white; /* títulos en blanco */
+            color: white;
         }
         .rating-circle {
             position: absolute;
-            bottom: -15px; /* mitad fuera del póster */
-            left: -15px;
+            bottom: 0; 
+            left: 0;
+            transform: translate(-30%, 30%); /* mitad dentro, mitad fuera */
             width: 60px;
             height: 60px;
         }
         .rating-circle svg {
-            transform: rotate(-90deg); /* empieza arriba */
+            transform: rotate(-90deg);
         }
         .rating-text {
             position: absolute;
@@ -53,7 +54,34 @@
             color: white;
         }
         .progress {
-            transition: stroke-dashoffset 1.5s ease; /* animación suave */
+            transition: stroke-dashoffset 1.5s ease;
+        }
+        /* Popup estilo tooltip */
+        .popup {
+            display: none;
+            position: absolute;
+            bottom: 100%; /* aparece arriba del póster */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 250px;
+            text-align: left;
+            z-index: 10;
+        }
+        .popup h3 {
+            margin: 0;
+            color: #01b4e4;
+            font-size: 1.1em;
+        }
+        .popup p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .pelicula:hover .popup {
+            display: block;
         }
     </style>
 </head>
@@ -62,19 +90,18 @@
     <div id="lista"></div>
 
     <script>
-        const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  // Tu API Key v3
+        const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
         const ids = [238, 603, 597, 496243]; // El Padrino, Matrix, Titanic, Parasite
 
         ids.forEach(id => {
             fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`)
                 .then(res => res.json())
                 .then(data => {
-                    const rating = data.vote_average * 10; // porcentaje
-                    const radius = 28;
+                    const rating = data.vote_average * 10;
+                    const radius = 26; // más fino
                     const circumference = 2 * Math.PI * radius;
                     const offset = circumference - (rating / 100) * circumference;
 
-                    // Color dinámico según calificación
                     let color;
                     if (rating >= 70) {
                         color = "#21d07a"; // verde
@@ -92,17 +119,21 @@
                             <p>${data.title}</p>
                             <div class="rating-circle">
                                 <svg width="60" height="60">
-                                    <circle cx="30" cy="30" r="${radius}" stroke="#444" stroke-width="6" fill="black"/>
-                                    <circle class="progress" cx="30" cy="30" r="${radius}" stroke="${color}" stroke-width="6" fill="transparent"
+                                    <circle cx="30" cy="30" r="${radius}" stroke="#444" stroke-width="4" fill="black"/>
+                                    <circle class="progress" cx="30" cy="30" r="${radius}" stroke="${color}" stroke-width="4" fill="transparent"
                                         stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}" />
                                 </svg>
                                 <div class="rating-text">${data.vote_average.toFixed(1)}</div>
+                            </div>
+                            <div class="popup">
+                                <h3>${data.title}</h3>
+                                <p><strong>Estreno:</strong> ${data.release_date}</p>
+                                <p>${data.overview}</p>
                             </div>
                         </a>
                     `;
                     document.getElementById("lista").appendChild(div);
 
-                    // Animación: después de insertar, ajustamos el offset
                     setTimeout(() => {
                         div.querySelector(".progress").setAttribute("stroke-dashoffset", offset);
                     }, 100);
@@ -111,4 +142,3 @@
     </script>
 </body>
 </html>
-
