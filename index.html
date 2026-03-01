@@ -73,7 +73,7 @@
       const resultado = Papa.parse(texto, {header:true, skipEmptyLines:true});
       return resultado.data; // devuelve array de objetos con claves = encabezados
     }
-	        // Renderizar tarjeta de película/serie
+	        /// Renderizar tarjeta de película/serie
 function renderItem(data, type, containerId) {
   const rating = parseFloat(data.vote_average) * 10;
   const radius = 20;
@@ -118,13 +118,13 @@ function renderItem(data, type, containerId) {
 
   poster.addEventListener("mouseenter", () => {
     popupTimer = setTimeout(() => {
-      popup.style.display = "block";
+      popup.style.opacity = "1"; // mostrar popup
     }, 2000); // espera 2 segundos
   });
 
   poster.addEventListener("mouseleave", () => {
     clearTimeout(popupTimer);
-    popup.style.display = "none";
+    popup.style.opacity = "0"; // ocultar popup
   });
 }
 
@@ -404,6 +404,7 @@ function renderItem(data, type, containerId) {
   </script>
 </body>
 </html>
+
 
 
 
