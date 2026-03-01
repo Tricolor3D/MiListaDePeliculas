@@ -79,11 +79,11 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 }
 
 .input-wrapper .lupa {
-  left: 12px; /* ícono dentro del campo a la izquierda */
+  left: 8px; /* ícono dentro del campo a la izquierda */
 }
 
 .input-wrapper .borrar {
-  right: 12px; /* ícono dentro del campo a la derecha */
+  right: 8px; /* ícono dentro del campo a la derecha */
 }
 
 .buscador select {
