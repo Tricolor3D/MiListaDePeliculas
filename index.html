@@ -285,45 +285,62 @@
     }
 	   /* 🔎 Bloque del buscador */
     function buscar(){
-      const query = document.getElementById("campoBusqueda").value.toLowerCase().trim();
-      const ordenar = document.getElementById("ordenarPor").value;
+  const query = document.getElementById("campoBusqueda").value.toLowerCase().trim();
+  const ordenar = document.getElementById("ordenarPor").value;
 
-      if(!query && !ordenar){
-        mostrarPeliculas();
-        return;
-      }
-
-      document.getElementById("tituloSeccion").textContent = "Resultados de búsqueda";
-      document.getElementById("contenedor").innerHTML = "";
-
-      let items = [...peliculas, ...series];
-
-      let resultados = items.filter(item => {
-        const titulo = (item.title || item.name || "").toLowerCase();
-        const fecha = (item.release_date || item.first_air_date || "");
-        const genero = (item.genres || "").toLowerCase();
-        const director = (item.director || "").toLowerCase();
-
-        return titulo.includes(query) || fecha.includes(query) || genero.includes(query) || director.includes(query);
-      });
-
-      if(ordenar === "titulo"){
-        resultados.sort((a,b)=>(a.title||a.name).localeCompare(b.title||b.name));
-      } else if(ordenar === "anio"){
-        resultados.sort((a,b)=>(a.release_date||a.first_air_date).localeCompare(b.release_date||b.first_air_date));
-      }
-
-      if(resultados.length === 0){
-        document.getElementById("contenedor").innerHTML = "<p>No se encontraron resultados.</p>";
-      } else {
-        resultados.forEach(item=>{
-          renderItem(item, item.title?"movie":"tv", "contenedor");
-        });
-      }
-
-      pagina = 1;
-      document.getElementById("paginaActual").textContent = pagina;
+  if(!query && !ordenar){
+    if(modo === "peliculas"){
+      mostrarPeliculas();
+    } else if(modo === "series"){
+      mostrarSeries();
+    } else {
+      mostrarPeliculas(); // por defecto
     }
+    return;
+  }
+
+  document.getElementById("tituloSeccion").textContent = "Resultados de búsqueda";
+  document.getElementById("contenedor").innerHTML = "";
+
+  // 🔎 Usar solo el array según el modo actual
+  let items = [];
+  if(modo === "peliculas"){
+    items = [...peliculas];
+  } else if(modo === "series"){
+    items = [...series];
+  } else {
+    items = [...peliculas, ...series]; // fallback si estás en otra vista
+  }
+
+  // Filtrar resultados
+  let resultados = items.filter(item => {
+    const titulo = (item.title || item.name || "").toLowerCase();
+    const fecha = (item.release_date || item.first_air_date || "");
+    const genero = (item.genres || "").toLowerCase();
+    const director = (item.director || "").toLowerCase();
+
+    return titulo.includes(query) || fecha.includes(query) || genero.includes(query) || director.includes(query);
+  });
+
+  // Ordenar resultados
+  if(ordenar === "titulo"){
+    resultados.sort((a,b)=>(a.title||a.name).localeCompare(b.title||b.name));
+  } else if(ordenar === "anio"){
+    resultados.sort((a,b)=>(a.release_date||a.first_air_date).localeCompare(b.release_date||b.first_air_date));
+  }
+
+  // Mostrar resultados
+  if(resultados.length === 0){
+    document.getElementById("contenedor").innerHTML = "<p>No se encontraron resultados.</p>";
+  } else {
+    resultados.forEach(item=>{
+      renderItem(item, item.title?"movie":"tv", "contenedor");
+    });
+  }
+
+  pagina = 1;
+  document.getElementById("paginaActual").textContent = pagina;
+}
 
     function limpiarBusqueda(){
       document.getElementById("campoBusqueda").value = "";
@@ -344,6 +361,7 @@
   </script>
 </body>
 </html>
+
 
 
 
