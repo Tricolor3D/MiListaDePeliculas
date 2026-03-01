@@ -5,6 +5,8 @@
   <title>Mi Lista de Películas y Series</title>
   <!-- Enlace al archivo CSS externo -->
   <link rel="stylesheet" href="css/BiblioPeliStyle.css">
+  <!-- Librería PapaParse para leer CSV correctamente -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <h1>Mi Lista de Películas y Series</h1>
@@ -35,17 +37,14 @@
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
 
-    // Nueva función para cargar datos desde CSV
+    // Nueva función para cargar datos desde CSV usando PapaParse
     async function cargarCSV(ruta) {
       const resp = await fetch(ruta);
       const texto = await resp.text();
-      const lineas = texto.split("\n").slice(1); // saltar encabezado
-      return lineas.filter(l => l.trim() !== "").map(l => {
-        const cols = l.split(",");
-        return cols;
-      });
+      const resultado = Papa.parse(texto, {header:true, skipEmptyLines:true});
+      return resultado.data; // devuelve array de objetos con claves = encabezados
     }
-	    // Renderizar tarjeta de película/serie
+	        // Renderizar tarjeta de película/serie
     function renderItem(data, type, containerId) {
       const rating = parseFloat(data.vote_average) * 10;
       const radius = 20;
@@ -73,6 +72,7 @@
             <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
             ${type==="movie"?`<p><strong>Director:</strong> ${data.director}</p>`:""}
             <p><strong>Género:</strong> ${genres}</p>
+            <p><strong>Calificación:</strong> ${parseFloat(data.vote_average).toFixed(1)}</p>
             <p>${data.overview}</p>
           </div>
         </a>`;
@@ -105,8 +105,7 @@
         poster_path: cols[5],
         overview: cols[6]
       };
-    }
-	    // Mostrar películas
+    }    // Mostrar películas
     function mostrarPeliculas(){
       modo="peliculas"; 
       modoAnterior="peliculas"; 
@@ -163,13 +162,15 @@
       const generosUnicos = [];
 
       todosGeneros.forEach(gStr=>{
-        gStr.split(",").forEach(g=>{
-          const nombre = g.trim();
-          if(Object.keys(imagenesGeneros).includes(nombre) && !nombresIncluidos.has(nombre)){
-            nombresIncluidos.add(nombre);
-            generosUnicos.push({name:nombre});
-          }
-        });
+        if(gStr){
+          gStr.split(",").forEach(g=>{
+            const nombre = g.trim();
+            if(Object.keys(imagenesGeneros).includes(nombre) && !nombresIncluidos.has(nombre)){
+              nombresIncluidos.add(nombre);
+              generosUnicos.push({name:nombre});
+            }
+          });
+        }
       });
 
       generosUnicos.forEach(g=>{
@@ -196,13 +197,13 @@
     }
 
     function cargarPorGenero(nombreGenero){
-      resultadosGenero = [...peliculas, ...series].filter(item=>item.genres.includes(nombreGenero));
+      resultadosGenero = [...peliculas, ...series].filter(item=>item.genres && item.genres.includes(nombreGenero));
     }
 
     function mostrarPaginaGenero(){
       document.getElementById("contenedor").innerHTML="";
-      let inicio = (pagina-1)*30;
-      let fin = inicio+30;
+      let inicio = (pagina-1)*itemsPorPagina;
+      let fin = inicio+itemsPorPagina;
       let paginaItems = resultadosGenero.slice(inicio,fin);
 
       paginaItems.forEach(item=>{
@@ -211,7 +212,7 @@
 
       document.getElementById("paginaActual").textContent=pagina;
     }
-	    // Paginación anterior
+	        // Paginación anterior
     function paginaAnterior(){
       if(pagina>1){
         pagina--;
@@ -253,17 +254,16 @@
 
       document.getElementById("paginaActual").textContent=pagina;
     }
-	    // Inicialización optimizada
+	        // Inicialización optimizada con PapaParse
     (async function(){
-      const datosPeliculas = await cargarCSV("peliculas.csv");
-      const datosSeries = await cargarCSV("series.csv");
+      // Cargar CSV de películas y series
+      peliculas = await cargarCSV("peliculas.csv");
+      series = await cargarCSV("series.csv");
 
-      // Convertir filas CSV en objetos
-      peliculas = datosPeliculas.map(filaAPelicula);
-      series = datosSeries.map(filaASerie);
-
-      mostrarPeliculas(); // arrancamos mostrando películas
+      // Arrancamos mostrando películas
+      mostrarPeliculas();
     })();
   </script>
 </body>
 </html>
+
