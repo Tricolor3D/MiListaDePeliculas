@@ -46,17 +46,19 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 }
 .genero-card p { margin:0; color:#01b4e4; font-weight:bold; font-size:1.2em;}
 
-/* 🔎 Estilos del buscador */
+/* 🔎 Estilos del buscador con íconos SVG */
 .buscador {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin: 20px 0;
   gap: 5px;
+  position: relative;
 }
 
 .buscador input {
   width: 50%;
-  padding: 10px 15px;
+  padding: 10px 35px; /* espacio para íconos */
   border-radius: 25px;
   border: 1px solid #555;
   outline: none;
@@ -65,19 +67,19 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   color: white;
 }
 
-.buscador button {
-  padding: 10px 15px;
-  border-radius: 25px;
-  border: 1px solid #555;
-  background-color: transparent; /* fondo neutro */
-  color: white;
+.buscador .icon {
+  position: absolute;
   font-size: 16px;
+  color: white;
   cursor: pointer;
-  line-height: 1;
 }
 
-.buscador button:hover {
-  background-color: rgba(255,255,255,0.1); /* leve sombreado al pasar el mouse */
+.buscador .lupa {
+  left: calc(25% + 15px); /* ajusta según ancho input */
+}
+
+.buscador .borrar {
+  right: calc(25% + 15px); /* ajusta según ancho input */
 }
 
 .buscador select {
