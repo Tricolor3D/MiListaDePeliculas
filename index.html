@@ -266,6 +266,55 @@
 
       document.getElementById("paginaActual").textContent=pagina;
     }
+	   /* 🔎 Bloque del buscador */
+    function buscar(){
+      const query = document.getElementById("campoBusqueda").value.toLowerCase().trim();
+      const ordenar = document.getElementById("ordenarPor").value;
+
+      if(!query && !ordenar){
+        mostrarPeliculas();
+        return;
+      }
+
+      document.getElementById("tituloSeccion").textContent = "Resultados de búsqueda";
+      document.getElementById("contenedor").innerHTML = "";
+
+      let items = [...peliculas, ...series];
+
+      let resultados = items.filter(item => {
+        const titulo = (item.title || item.name || "").toLowerCase();
+        const fecha = (item.release_date || item.first_air_date || "");
+        const genero = (item.genres || "").toLowerCase();
+        const director = (item.director || "").toLowerCase();
+
+        return titulo.includes(query) || fecha.includes(query) || genero.includes(query) || director.includes(query);
+      });
+
+      if(ordenar === "titulo"){
+        resultados.sort((a,b)=>(a.title||a.name).localeCompare(b.title||b.name));
+      } else if(ordenar === "anio"){
+        resultados.sort((a,b)=>(a.release_date||a.first_air_date).localeCompare(b.release_date||b.first_air_date));
+      }
+
+      if(resultados.length === 0){
+        document.getElementById("contenedor").innerHTML = "<p>No se encontraron resultados.</p>";
+      } else {
+        resultados.forEach(item=>{
+          renderItem(item, item.title?"movie":"tv", "contenedor");
+        });
+      }
+
+      pagina = 1;
+      document.getElementById("paginaActual").textContent = pagina;
+    }
+
+    function limpiarBusqueda(){
+      document.getElementById("campoBusqueda").value = "";
+      document.getElementById("ordenarPor").value = "";
+      pagina = 1;
+      mostrarPeliculas();
+    }
+  
 	        // Inicialización optimizada con PapaParse
     (async function(){
       // Cargar CSV de películas y series
@@ -278,5 +327,6 @@
   </script>
 </body>
 </html>
+
 
 
