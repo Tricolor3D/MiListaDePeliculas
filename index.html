@@ -11,6 +11,18 @@
 <body>
   <h1>Mi Lista de Películas y Series</h1>
 
+  <!-- Barra de búsqueda -->
+  <div class="buscador">
+    <input type="text" id="campoBusqueda" placeholder="Buscar Película, Serie, Nombre, Año, Género, Director..." oninput="buscar()">
+    <button onclick="buscar()">🔍</button>
+    <select id="ordenarPor" onchange="buscar()">
+      <option value="">Ordenar...</option>
+      <option value="titulo">Título A-Z</option>
+      <option value="anio">Año</option>
+    </select>
+    <button onclick="limpiarBusqueda()">❌</button>
+  </div>
+
   <!-- Menú superior -->
   <div class="menu">
     <button onclick="mostrarPeliculas()">Películas</button>
@@ -266,4 +278,5 @@
   </script>
 </body>
 </html>
+
 
