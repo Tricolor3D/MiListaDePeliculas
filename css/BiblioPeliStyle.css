@@ -45,3 +45,50 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   border-radius:0 0 10px 10px;
 }
 .genero-card p { margin:0; color:#01b4e4; font-weight:bold; font-size:1.2em;}
+
+/* 🔎 Estilos del buscador */
+.buscador {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 5px;
+}
+
+.buscador input {
+  width: 50%;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+}
+
+.buscador button {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  background-color: #007BFF;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.buscador button:hover {
+  background-color: #0056b3;
+}
+
+.buscador select {
+  padding: 10px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Botón de limpiar búsqueda (❌) */
+.buscador button:last-child {
+  background-color: #dc3545;
+}
+
+.buscador button:last-child:hover {
+  background-color: #a71d2a;
+}
