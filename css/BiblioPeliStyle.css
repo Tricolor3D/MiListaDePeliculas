@@ -1,96 +1,25 @@
-body { 
-  font-family:"Segoe UI",Arial,sans-serif; 
-  background:#0d253f; 
-  color:white; 
-  margin:20px;
-}
+body { font-family:"Segoe UI",Arial,sans-serif; background:#0d253f; color:white; margin:20px;}
+h1 { text-align:center; color:#01b4e4; font-size:2.5em;}
+.menu { display:flex; justify-content:center; gap:20px; margin:20px 0;}
+.menu button { background:#01b4e4; border:none; padding:10px 20px; border-radius:5px; color:white; cursor:pointer; font-weight:bold;}
+.menu button:hover { background:#0288a7;}
+h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
+.contenedor { display:flex; flex-wrap:wrap; justify-content:center;}
+.pelicula { display:inline-block; margin:20px; text-align:center; width:200px; position:relative;}
+.pelicula img { width:100%; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.5);}
+.pelicula p { margin-top:8px; font-size:1.05em; color:white; font-weight:normal;}
 
-h1 { 
-  text-align:center; 
-  color:#01b4e4; 
-  font-size:2.5em;
-}
-
-.menu { 
-  display:flex; 
-  justify-content:center; 
-  gap:20px; 
-  margin:20px 0;
-}
-
-.menu button { 
-  background:#01b4e4; 
-  border:none; 
-  padding:10px 20px; 
-  border-radius:5px; 
-  color:white; 
-  cursor:pointer; 
-  font-weight:bold;
-}
-
-.menu button:hover { 
-  background:#0288a7;
-}
-
-h2 { 
-  color:#01b4e4; 
-  font-size:2em; 
-  margin-top:20px;
-}
-
-.contenedor { 
-  display:flex; 
-  flex-wrap:wrap; 
-  justify-content:center;
-}
-
-.pelicula { 
-  display:inline-block; 
-  margin:20px; 
-  text-align:center; 
-  width:200px; 
-  position:relative;
-}
-
-.pelicula img { 
-  width:100%; 
-  border-radius:8px; 
-  box-shadow:0 4px 10px rgba(0,0,0,0.5);
-}
-
-.pelicula p { 
-  margin-top:8px; 
-  font-size:1.05em; 
-  color:white; 
-  font-weight:normal;
-}
-
+/* 🔎 Ajuste del círculo de calificación */
 .rating-circle { 
   position:absolute; 
-  bottom:0; 
-  left:0; 
-  transform:translate(-40%,-40%); 
+  bottom:10px;   /* más arriba que antes */
+  left:10px;     /* separado del borde */
   width:48px; 
   height:48px;
 }
-
-.rating-circle svg { 
-  transform:rotate(-90deg);
-}
-
-.rating-text { 
-  position:absolute; 
-  top:50%; 
-  left:50%; 
-  transform:translate(-50%,-50%); 
-  font-size:0.8em; 
-  font-weight:bold; 
-  color:white;
-}
-
-.progress { 
-  transition:stroke-dashoffset 1.5s ease;
-}
+.rating-circle svg { transform:rotate(-90deg);}
+.rating-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.8em; font-weight:bold; color:white;}
+.progress { transition:stroke-dashoffset 1.5s ease;}
 
 /* 🔎 Popup oculto por defecto, controlado con JS */
 .popup { 
@@ -111,40 +40,15 @@ h2 {
   overflow-y:auto; 
   z-index:1000;
 }
-
 /* ❌ Eliminamos esta regla para que no aparezca con hover inmediato */
 /* .pelicula:hover .popup { opacity:1; } */
 
-.popup h3 { 
-  margin:0; 
-  color:#01b4e4; 
-  font-size:1em; 
-  font-weight:normal;
-}
+.popup h3 { margin:0; color:#01b4e4; font-size:1em; font-weight:normal;}
+.popup p { margin:2px 0; font-weight:normal;}
 
-.popup p { 
-  margin:2px 0; 
-  font-weight:normal;
-}
-
-.paginacion { 
-  text-align:center; 
-  margin:20px;
-}
-
-.paginacion button { 
-  background:#01b4e4; 
-  border:none; 
-  padding:8px 15px; 
-  border-radius:5px; 
-  color:white; 
-  cursor:pointer; 
-  margin:0 10px;
-}
-
-.paginacion button:hover { 
-  background:#0288a7;
-}
+.paginacion { text-align:center; margin:20px;}
+.paginacion button { background:#01b4e4; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; margin:0 10px;}
+.paginacion button:hover { background:#0288a7;}
 
 /* Tarjetas de géneros */
 .genero-card {
@@ -159,11 +63,7 @@ h2 {
   box-shadow:0 4px 10px rgba(0,0,0,0.6);
   transition:transform 0.3s ease;
 }
-
-.genero-card:hover { 
-  transform:scale(1.05);
-}
-
+.genero-card:hover { transform:scale(1.05);}
 .genero-card .overlay {
   position:absolute;
   bottom:0;
@@ -173,13 +73,7 @@ h2 {
   padding:10px;
   border-radius:0 0 10px 10px;
 }
-
-.genero-card p { 
-  margin:0; 
-  color:#01b4e4; 
-  font-weight:bold; 
-  font-size:1.2em;
-}
+.genero-card p { margin:0; color:#01b4e4; font-weight:bold; font-size:1.2em;}
 
 /* 🔎 Estilos del buscador con íconos integrados */
 .buscador {
@@ -187,42 +81,32 @@ h2 {
   justify-content: center;
   align-items: center;
   margin: 20px 0;
-  gap: 15px; /* más espacio entre input y select */
+  gap: 15px;
 }
-
 .input-wrapper {
   position: relative;
-  flex: 1; /* ocupa todo el espacio disponible */
-  max-width: 600px; /* límite de ancho para que no se desborde */
+  flex: 1;
+  max-width: 600px;
 }
-
 .input-wrapper input {
-  width: 100%; /* ocupa todo el ancho del contenedor */
-  padding: 10px 40px; /* espacio para íconos */
+  width: 100%;
+  padding: 10px 40px;
   border-radius: 25px;
   border: 1px solid #555;
   outline: none;
   font-size: 16px;
   background-color: #0d253f;
   color: white;
-  box-sizing: border-box; /* evita que el padding achique el campo */
+  box-sizing: border-box;
 }
-
 .input-wrapper .icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
 }
-
-.input-wrapper .lupa {
-  left: 12px; /* dentro del campo a la izquierda */
-}
-
-.input-wrapper .borrar {
-  right: 12px; /* dentro del campo a la derecha */
-}
-
+.input-wrapper .lupa { left: 12px; }
+.input-wrapper .borrar { right: 12px; }
 .buscador select {
   padding: 10px;
   border-radius: 25px;
