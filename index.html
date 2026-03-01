@@ -136,21 +136,46 @@
       };
     }    // Mostrar películas
     function mostrarPeliculas(){
-      modo="peliculas"; 
-      modoAnterior="peliculas"; 
-      pagina=1;
-      document.getElementById("tituloSeccion").textContent="Películas";
-      mostrarPagina();
-    }
+  modo = "peliculas";
+  document.getElementById("tituloSeccion").textContent = "Películas";
+  document.getElementById("contenedor").innerHTML = "";
+
+  // Calcular rango según la página actual
+  const inicio = (pagina - 1) * itemsPorPagina;
+  const fin = inicio + itemsPorPagina;
+
+  // Cortar el array de películas
+  const paginaPeliculas = peliculas.slice(inicio, fin);
+
+  // Renderizar solo esa página
+  paginaPeliculas.forEach(peli => {
+    renderItem(peli, "movie", "contenedor");
+  });
+
+  // Actualizar número de página
+  document.getElementById("paginaActual").textContent = pagina;
+}
+
+
 
     // Mostrar series
     function mostrarSeries(){
-      modo="series"; 
-      modoAnterior="series"; 
-      pagina=1;
-      document.getElementById("tituloSeccion").textContent="Series";
-      mostrarPagina();
-    }
+  modo = "series";
+  document.getElementById("tituloSeccion").textContent = "Series";
+  document.getElementById("contenedor").innerHTML = "";
+
+  const inicio = (pagina - 1) * itemsPorPagina;
+  const fin = inicio + itemsPorPagina;
+
+  const paginaSeries = series.slice(inicio, fin);
+
+  paginaSeries.forEach(serie => {
+    renderItem(serie, "tv", "contenedor");
+  });
+
+  document.getElementById("paginaActual").textContent = pagina;
+}
+
 
     // Mostrar recientes (ordenados por fecha)
     function mostrarRecientes(){
@@ -360,6 +385,7 @@
   </script>
 </body>
 </html>
+
 
 
 
