@@ -28,45 +28,31 @@
   </div>
 
   <script>
-    const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
-
-    let movieIds = [];
-    let seriesIds = [];
-    let cachePeliculas = {};
-    let cacheSeries = {};
+    let peliculas = [];
+    let series = [];
     let pagina = 1;
     let itemsPorPagina = 30; // ahora mostramos 30 por página
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
 
-    // Nueva función para cargar IDs desde archivos .txt
-    async function cargarIdsDesdeArchivo(ruta) {
+    // Nueva función para cargar datos desde CSV
+    async function cargarCSV(ruta) {
       const resp = await fetch(ruta);
       const texto = await resp.text();
-      return texto.split("\n")
-                  .map(linea => linea.trim())
-                  .filter(linea => linea && !linea.includes("NO ENCONTRADO"))
-                  .map(linea => {
-                    const partes = linea.split("—");
-                    return partes[1]?.trim();
-                  });
+      const lineas = texto.split("\n").slice(1); // saltar encabezado
+      return lineas.filter(l => l.trim() !== "").map(l => {
+        const cols = l.split(",");
+        return cols;
+      });
     }
-	    // Obtener director de una película
-    async function getDirector(id) {
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}`);
-      const data = await res.json();
-      const director = data.crew.find(c => c.job === "Director");
-      return director ? director.name : "Desconocido";
-    }
-
-    // Renderizar tarjeta de película/serie
-    function renderItem(data, type, containerId, director="") {
-      const rating = data.vote_average * 10;
+	    // Renderizar tarjeta de película/serie
+    function renderItem(data, type, containerId) {
+      const rating = parseFloat(data.vote_average) * 10;
       const radius = 20;
       const circumference = 2 * Math.PI * radius;
       const offset = circumference - (rating/100)*circumference;
       let color = rating>=70 ? "#21d07a" : rating>=40 ? "#d2d531" : "#db2360";
-      const genres = data.genres ? data.genres.map(g=>g.name).join(", ") : "";
+      const genres = data.genres || "";
 
       const div = document.createElement("div");
       div.className="pelicula";
@@ -80,12 +66,12 @@
               <circle class="progress" cx="24" cy="24" r="${radius}" stroke="${color}" stroke-width="3" fill="transparent"
                 stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"/>
             </svg>
-            <div class="rating-text">${data.vote_average.toFixed(1)}</div>
+            <div class="rating-text">${parseFloat(data.vote_average).toFixed(1)}</div>
           </div>
           <div class="popup">
             <h3>${data.title||data.name}</h3>
             <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
-            ${type==="movie"?`<p><strong>Director:</strong> ${director}</p>`:""}
+            ${type==="movie"?`<p><strong>Director:</strong> ${data.director}</p>`:""}
             <p><strong>Género:</strong> ${genres}</p>
             <p>${data.overview}</p>
           </div>
@@ -94,23 +80,31 @@
       setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
     }
 
-    // Obtener datos de una película por ID (con cache)
-    async function obtenerPelicula(id){
-      if(cachePeliculas[id]) return cachePeliculas[id];
-      const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`);
-      const data = await res.json();
-      const director = await getDirector(id);
-      cachePeliculas[id] = {...data, director};
-      return cachePeliculas[id];
+    // Función para convertir una fila CSV en objeto película
+    function filaAPelicula(cols) {
+      return {
+        id: cols[0],
+        title: cols[1],
+        release_date: cols[2],
+        director: cols[3],
+        genres: cols[4],
+        vote_average: cols[5],
+        poster_path: cols[6],
+        overview: cols[7]
+      };
     }
 
-    // Obtener datos de una serie por ID (con cache)
-    async function obtenerSerie(id){
-      if(cacheSeries[id]) return cacheSeries[id];
-      const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`);
-      const data = await res.json();
-      cacheSeries[id] = data;
-      return cacheSeries[id];
+    // Función para convertir una fila CSV en objeto serie
+    function filaASerie(cols) {
+      return {
+        id: cols[0],
+        name: cols[1],
+        first_air_date: cols[2],
+        genres: cols[3],
+        vote_average: cols[4],
+        poster_path: cols[5],
+        overview: cols[6]
+      };
     }
 	    // Mostrar películas
     function mostrarPeliculas(){
@@ -131,37 +125,22 @@
     }
 
     // Mostrar recientes (ordenados por fecha)
-    async function mostrarRecientes(){
+    function mostrarRecientes(){
       modo="recientes";
       document.getElementById("tituloSeccion").textContent="Recientes";
       document.getElementById("contenedor").innerHTML="";
-      let ids = (modoAnterior==="series"?seriesIds:movieIds);
-      let items = [];
-      for(let id of ids){
-        let item = (modoAnterior==="series"? await obtenerSerie(id) : await obtenerPelicula(id));
-        items.push(item);
-      }
+      let items = (modoAnterior==="series"?series:peliculas);
       items.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
       items.slice(0,30).forEach(item=>{
-        renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor",item.director||"");
+        renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor");
       });
     }
 
-    // Cargar géneros
-    async function cargarGeneros(){
-      const resMovies = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
-      const resSeries = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
-      const dataMovies = await resMovies.json();
-      const dataSeries = await resSeries.json();
-      return {peliculas: dataMovies.genres, series: dataSeries.genres};
-    }
-
-    // Mostrar géneros
-    async function mostrarGeneros(){
+    // Mostrar géneros (usando los géneros ya presentes en CSV)
+    function mostrarGeneros(){
       modo="generos";
       document.getElementById("tituloSeccion").textContent="Géneros";
       document.getElementById("contenedor").innerHTML="";
-      const generos = await cargarGeneros();
 
       const imagenesGeneros = {
         "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
@@ -178,15 +157,19 @@
         "Western":"https://image.tmdb.org/t/p/w500/4Yd3UuGzQkWzQ3QAtF5NCz7kZ4f.jpg"
       };
 
-      const todosGeneros = [...generos.peliculas, ...generos.series];
-      const generosUnicos = [];
+      // Extraer géneros únicos de películas y series
+      const todosGeneros = [...peliculas.map(p=>p.genres), ...series.map(s=>s.genres)];
       const nombresIncluidos = new Set();
+      const generosUnicos = [];
 
-      todosGeneros.forEach(g=>{
-        if(Object.keys(imagenesGeneros).includes(g.name) && !nombresIncluidos.has(g.name)){
-          nombresIncluidos.add(g.name);
-          generosUnicos.push(g);
-        }
+      todosGeneros.forEach(gStr=>{
+        gStr.split(",").forEach(g=>{
+          const nombre = g.trim();
+          if(Object.keys(imagenesGeneros).includes(nombre) && !nombresIncluidos.has(nombre)){
+            nombresIncluidos.add(nombre);
+            generosUnicos.push({name:nombre});
+          }
+        });
       });
 
       generosUnicos.forEach(g=>{
@@ -195,29 +178,25 @@
         const img=imagenesGeneros[g.name];
         div.style.backgroundImage=`url('${img}')`;
         div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
-        div.onclick=()=>mostrarPorGenero(g.id,"movie");
+        div.onclick=()=>mostrarPorGenero(g.name);
         document.getElementById("contenedor").appendChild(div);
       });
     }
 
     let resultadosGenero=[];
-    let generoActualId=null;
-    let generoActualTipo=null;
+    let generoActualNombre=null;
 
-    async function mostrarPorGenero(idGenero, tipo){
+    function mostrarPorGenero(nombreGenero){
       modo="generos";
       pagina=1;
-      generoActualId=idGenero;
-      generoActualTipo=tipo;
-      document.getElementById("tituloSeccion").textContent="Género seleccionado";
-      await cargarPorGenero(idGenero,tipo);
+      generoActualNombre=nombreGenero;
+      document.getElementById("tituloSeccion").textContent="Género: "+nombreGenero;
+      cargarPorGenero(nombreGenero);
       mostrarPaginaGenero();
     }
 
-    async function cargarPorGenero(idGenero,tipo){
-      const res = await fetch(`https://api.themoviedb.org/3/discover/${tipo}?api_key=${apiKey}&language=es-ES&with_genres=${idGenero}&page=1`);
-      const data = await res.json();
-      resultadosGenero = data.results;
+    function cargarPorGenero(nombreGenero){
+      resultadosGenero = [...peliculas, ...series].filter(item=>item.genres.includes(nombreGenero));
     }
 
     function mostrarPaginaGenero(){
@@ -227,7 +206,7 @@
       let paginaItems = resultadosGenero.slice(inicio,fin);
 
       paginaItems.forEach(item=>{
-        renderItem(item,generoActualTipo,"contenedor");
+        renderItem(item,item.title?"movie":"tv","contenedor");
       });
 
       document.getElementById("paginaActual").textContent=pagina;
@@ -247,13 +226,13 @@
     // Paginación siguiente
     function paginaSiguiente(){
       if(modo==="generos"){
-        if(pagina*30 < resultadosGenero.length){
+        if(pagina*itemsPorPagina < resultadosGenero.length){
           pagina++;
           mostrarPaginaGenero();
         }
       } else {
-        let ids = (modo==="peliculas"?movieIds:seriesIds);
-        if(pagina*itemsPorPagina < ids.length){
+        let items = (modo==="peliculas"?peliculas:series);
+        if(pagina*itemsPorPagina < items.length){
           pagina++;
           mostrarPagina();
         }
@@ -261,24 +240,28 @@
     }
 
     // Mostrar página actual (optimizado: carga solo 30 ítems)
-    async function mostrarPagina(){
+    function mostrarPagina(){
       document.getElementById("contenedor").innerHTML="";
-      let ids = (modo==="peliculas"?movieIds:seriesIds);
+      let items = (modo==="peliculas"?peliculas:series);
       let inicio = (pagina-1)*itemsPorPagina;
       let fin = inicio+itemsPorPagina;
-      let paginaIds = ids.slice(inicio,fin);
+      let paginaItems = items.slice(inicio,fin);
 
-      for(let id of paginaIds){
-        let item = (modo==="peliculas"? await obtenerPelicula(id) : await obtenerSerie(id));
-        renderItem(item,modo==="series"?"tv":"movie","contenedor",item.director||"");
-      }
+      paginaItems.forEach(item=>{
+        renderItem(item,modo==="series"?"tv":"movie","contenedor");
+      });
 
       document.getElementById("paginaActual").textContent=pagina;
     }
 	    // Inicialización optimizada
     (async function(){
-      movieIds = await cargarIdsDesdeArchivo("peliculas_con_ids.txt");
-      seriesIds = await cargarIdsDesdeArchivo("series_con_ids.txt");
+      const datosPeliculas = await cargarCSV("peliculas.csv");
+      const datosSeries = await cargarCSV("series.csv");
+
+      // Convertir filas CSV en objetos
+      peliculas = datosPeliculas.map(filaAPelicula);
+      series = datosSeries.map(filaASerie);
+
       mostrarPeliculas(); // arrancamos mostrando películas
     })();
   </script>
