@@ -30,10 +30,12 @@
   <script>
     const apiKey = "86f6772a666a8617d6b629fa9a4b3c62";  
 
-    let peliculasData = [];
-    let seriesData = [];
+    let movieIds = [];
+    let seriesIds = [];
+    let cachePeliculas = {};
+    let cacheSeries = {};
     let pagina = 1;
-    let itemsPorPagina = 20;
+    let itemsPorPagina = 30; // ahora mostramos 30 por página
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
 
@@ -92,27 +94,23 @@
       setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
     }
 
-    // Cargar películas desde archivo de IDs
-    async function cargarPeliculas() {
-      peliculasData = [];
-      const movieIds = await cargarIdsDesdeArchivo("peliculas_con_ids.txt");
-      for (let id of movieIds) {
-        const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`);
-        const data = await res.json();
-        const director = await getDirector(id);
-        peliculasData.push({...data, director});
-      }
+    // Obtener datos de una película por ID (con cache)
+    async function obtenerPelicula(id){
+      if(cachePeliculas[id]) return cachePeliculas[id];
+      const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=es-ES`);
+      const data = await res.json();
+      const director = await getDirector(id);
+      cachePeliculas[id] = {...data, director};
+      return cachePeliculas[id];
     }
 
-    // Cargar series desde archivo de IDs
-    async function cargarSeries() {
-      seriesData = [];
-      const seriesIds = await cargarIdsDesdeArchivo("series_con_ids.txt");
-      for (let id of seriesIds) {
-        const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`);
-        const data = await res.json();
-        seriesData.push(data);
-      }
+    // Obtener datos de una serie por ID (con cache)
+    async function obtenerSerie(id){
+      if(cacheSeries[id]) return cacheSeries[id];
+      const res = await fetch(`https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=es-ES`);
+      const data = await res.json();
+      cacheSeries[id] = data;
+      return cacheSeries[id];
     }
 	    // Mostrar películas
     function mostrarPeliculas(){
@@ -132,14 +130,19 @@
       mostrarPagina();
     }
 
-    // Mostrar recientes
-    function mostrarRecientes(){
+    // Mostrar recientes (ordenados por fecha)
+    async function mostrarRecientes(){
       modo="recientes";
       document.getElementById("tituloSeccion").textContent="Recientes";
       document.getElementById("contenedor").innerHTML="";
-      let lista = (modoAnterior==="series"?seriesData:peliculasData);
-      lista.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
-      lista.slice(0,20).forEach(item=>{
+      let ids = (modoAnterior==="series"?seriesIds:movieIds);
+      let items = [];
+      for(let id of ids){
+        let item = (modoAnterior==="series"? await obtenerSerie(id) : await obtenerPelicula(id));
+        items.push(item);
+      }
+      items.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
+      items.slice(0,30).forEach(item=>{
         renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor",item.director||"");
       });
     }
@@ -160,7 +163,6 @@
       document.getElementById("contenedor").innerHTML="";
       const generos = await cargarGeneros();
 
-      // Diccionario de imágenes actualizado
       const imagenesGeneros = {
         "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
         "Aventura":"https://image.tmdb.org/t/p/w500/2l05cFWJacyIsTpsqSgH0wQXe4V.jpg",
@@ -176,7 +178,6 @@
         "Western":"https://image.tmdb.org/t/p/w500/4Yd3UuGzQkWzQ3QAtF5NCz7kZ4f.jpg"
       };
 
-      // Filtrar y eliminar duplicados
       const todosGeneros = [...generos.peliculas, ...generos.series];
       const generosUnicos = [];
       const nombresIncluidos = new Set();
@@ -251,33 +252,34 @@
           mostrarPaginaGenero();
         }
       } else {
-        let lista = (modo==="peliculas"?peliculasData:seriesData);
-        if(pagina*itemsPorPagina < lista.length){
+        let ids = (modo==="peliculas"?movieIds:seriesIds);
+        if(pagina*itemsPorPagina < ids.length){
           pagina++;
           mostrarPagina();
         }
       }
     }
 
-    // Mostrar página actual (películas o series)
-    function mostrarPagina(){
+    // Mostrar página actual (optimizado: carga solo 30 ítems)
+    async function mostrarPagina(){
       document.getElementById("contenedor").innerHTML="";
-      let lista = (modo==="peliculas"?peliculasData:seriesData);
+      let ids = (modo==="peliculas"?movieIds:seriesIds);
       let inicio = (pagina-1)*itemsPorPagina;
       let fin = inicio+itemsPorPagina;
-      let paginaItems = lista.slice(inicio,fin);
+      let paginaIds = ids.slice(inicio,fin);
 
-      paginaItems.forEach(item=>{
+      for(let id of paginaIds){
+        let item = (modo==="peliculas"? await obtenerPelicula(id) : await obtenerSerie(id));
         renderItem(item,modo==="series"?"tv":"movie","contenedor",item.director||"");
-      });
+      }
 
       document.getElementById("paginaActual").textContent=pagina;
     }
-	    // Inicialización
+	    // Inicialización optimizada
     (async function(){
-      await cargarPeliculas();
-      await cargarSeries();
-      mostrarPeliculas();
+      movieIds = await cargarIdsDesdeArchivo("peliculas_con_ids.txt");
+      seriesIds = await cargarIdsDesdeArchivo("series_con_ids.txt");
+      mostrarPeliculas(); // arrancamos mostrando películas
     })();
   </script>
 </body>
