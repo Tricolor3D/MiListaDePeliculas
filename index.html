@@ -111,21 +111,21 @@ function renderItem(data, type, containerId) {
   // animación del círculo
   setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
 
-  // 🔎 Control del popup con delay
-  let popupTimer;
-  const poster = div.querySelector("img");
-  const popup = div.querySelector(".popup");
+ // 🔎 Control del popup con delay
+let popupTimer;
+const card = div; // usar el div completo de la tarjeta
+const popup = div.querySelector(".popup");
 
-  poster.addEventListener("mouseenter", () => {
-    popupTimer = setTimeout(() => {
-      popup.style.opacity = "1"; // mostrar popup
-    }, 2000); // espera 2 segundos
-  });
+card.addEventListener("mouseenter", () => {
+  popupTimer = setTimeout(() => {
+    popup.style.opacity = "1"; // mostrar popup
+  }, 2000); // espera 2 segundos
+});
 
-  poster.addEventListener("mouseleave", () => {
-    clearTimeout(popupTimer);
-    popup.style.opacity = "0"; // ocultar popup
-  });
+card.addEventListener("mouseleave", () => {
+  clearTimeout(popupTimer);
+  popup.style.opacity = "0"; // ocultar popup
+});
 }
 
     // Función para convertir una fila CSV en objeto película
@@ -404,6 +404,7 @@ function renderItem(data, type, containerId) {
   </script>
 </body>
 </html>
+
 
 
 
