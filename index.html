@@ -12,16 +12,35 @@
   <h1>Mi Lista de Películas y Series</h1>
 
   <!-- Barra de búsqueda -->
-  <div class="buscador">
-    <input type="text" id="campoBusqueda" placeholder="Buscar Película, Serie, Nombre, Año, Género, Director..." oninput="buscar()">
-    <button onclick="buscar()">🔍</button>
-    <select id="ordenarPor" onchange="buscar()">
-      <option value="">Ordenar...</option>
-      <option value="titulo">Título A-Z</option>
-      <option value="anio">Año</option>
-    </select>
-    <button onclick="limpiarBusqueda()">❌</button>
-  </div>
+<div class="buscador">
+  <span class="icon lupa" onclick="buscar()">
+    <!-- Ícono lupa SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 
+      1.415-1.414l-3.85-3.85zm-5.242 1.656a5.5 5.5 0 1 1 
+      0-11 5.5 5.5 0 0 1 0 11z"/>
+    </svg>
+  </span>
+
+  <input type="text" id="campoBusqueda" placeholder="Buscar Película, Serie, Nombre, Año, Género, Director..." oninput="buscar()">
+
+  <span class="icon borrar" onclick="limpiarBusqueda()">
+    <!-- Ícono X SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16">
+      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 
+      7.293l2.646-2.647a.5.5 0 0 1 
+      .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 
+      8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 
+      8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+    </svg>
+  </span>
+
+  <select id="ordenarPor" onchange="buscar()">
+    <option value="">Ordenar...</option>
+    <option value="titulo">Título A-Z</option>
+    <option value="anio">Año</option>
+  </select>
+</div>
 
   <!-- Menú superior -->
   <div class="menu">
@@ -327,6 +346,7 @@
   </script>
 </body>
 </html>
+
 
 
 
