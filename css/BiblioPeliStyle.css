@@ -52,12 +52,13 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   justify-content: center;
   align-items: center;
   margin: 20px 0;
-  gap: 10px;
+  gap: 15px; /* más espacio entre input y select */
 }
 
 .input-wrapper {
   position: relative;
-  width: 50%; /* ancho del campo */
+  flex: 1; /* ocupa todo el espacio disponible */
+  max-width: 600px; /* límite de ancho para que no se desborde */
 }
 
 .input-wrapper input {
