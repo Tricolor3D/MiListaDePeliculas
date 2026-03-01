@@ -88,12 +88,3 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   background-color: #0d253f;
   color: white;
 }
-
-/* Botón de limpiar búsqueda (❌) */
-.buscador button:last-child {
-  background-color: #dc3545;
-}
-
-.buscador button:last-child:hover {
-  background-color: #a71d2a;
-}
