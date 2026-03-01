@@ -242,32 +242,31 @@
       document.getElementById("paginaActual").textContent=pagina;
     }
 	        // Paginación anterior
-    function paginaAnterior(){
-      if(pagina>1){
-        pagina--;
-        if(modo==="generos"){
-          mostrarPaginaGenero();
-        } else {
-          mostrarPagina();
-        }
-      }
-    }
+   function paginaAnterior(){
+  if(pagina > 1){
+    pagina--;
+    if(modo === "peliculas") mostrarPeliculas();
+    else if(modo === "series") mostrarSeries();
+    else if(modo === "generos") mostrarGeneros();
+    else mostrarRecientes();
+
+    // 🔝 Llevar al inicio
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
 
     // Paginación siguiente
-    function paginaSiguiente(){
-      if(modo==="generos"){
-        if(pagina*itemsPorPagina < resultadosGenero.length){
-          pagina++;
-          mostrarPaginaGenero();
-        }
-      } else {
-        let items = (modo==="peliculas"?peliculas:series);
-        if(pagina*itemsPorPagina < items.length){
-          pagina++;
-          mostrarPagina();
-        }
-      }
-    }
+   function paginaSiguiente(){
+  pagina++;
+  if(modo === "peliculas") mostrarPeliculas();
+  else if(modo === "series") mostrarSeries();
+  else if(modo === "generos") mostrarGeneros();
+  else mostrarRecientes();
+
+  // 🔝 Llevar al inicio
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 
     // Mostrar página actual (optimizado: carga solo 30 ítems)
     function mostrarPagina(){
@@ -361,6 +360,7 @@
   </script>
 </body>
 </html>
+
 
 
 
