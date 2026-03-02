@@ -66,6 +66,7 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 }
 
 /* 🔎 Popup con animación */
+/* Popup normal (se abre hacia la izquierda) */
 .popup { 
   position:absolute; 
   bottom:30%; 
@@ -75,8 +76,8 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   background:rgba(0,0,0,0.7); 
   backdrop-filter:blur(8px);
   color:white; 
-  opacity:0; /* oculto por defecto */
-  transform:translateY(20px); /* empieza un poco más abajo */
+  opacity:0; 
+  transform:translateY(20px); 
   transition:opacity 0.4s ease, transform 0.4s ease; 
   border-radius:8px; 
   padding:10px; 
@@ -85,6 +86,14 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   overflow-y:auto; 
   z-index:1000;
 }
+
+/* Popup invertido (se abre hacia la derecha) */
+.popup.right { 
+  left:auto; 
+  right:0;   /* se apoya en el borde derecho del póster */
+  width:250%; 
+}
+
 /* ❌ Eliminamos esta regla para que no aparezca con hover inmediato */
 /* .pelicula:hover .popup { opacity:1; } */
 
