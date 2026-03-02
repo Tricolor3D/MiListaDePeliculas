@@ -118,16 +118,29 @@ const popup = div.querySelector(".popup");
 
 card.addEventListener("mouseenter", () => {
   popupTimer = setTimeout(() => {
+    // Detectar posición de la tarjeta
+    const rect = card.getBoundingClientRect();
+    const espacioDerecha = window.innerWidth - rect.right;
+
+    if (espacioDerecha < 300) {
+      // Si no hay espacio suficiente a la derecha, abrir hacia el otro lado
+      popup.classList.add("right");
+    } else {
+      popup.classList.remove("right");
+    }
+
     popup.style.opacity = "1"; 
-    popup.style.transform = "translateY(0)"; // se desliza hacia arriba
-  }, 1000);
+    popup.style.transform = "translateY(0)";
+  }, 800);
 });
 
 card.addEventListener("mouseleave", () => {
   clearTimeout(popupTimer);
   popup.style.opacity = "0"; 
-  popup.style.transform = "translateY(20px)"; // vuelve a bajar
+  popup.style.transform = "translateY(20px)";
 });
+
+
 }
 
     // Función para convertir una fila CSV en objeto película
@@ -406,6 +419,7 @@ card.addEventListener("mouseleave", () => {
   </script>
 </body>
 </html>
+
 
 
 
