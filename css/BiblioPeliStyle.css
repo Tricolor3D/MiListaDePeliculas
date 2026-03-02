@@ -5,15 +5,36 @@ h1 { text-align:center; color:#01b4e4; font-size:2.5em;}
 .menu button:hover { background:#0288a7;}
 h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 .contenedor { display:flex; flex-wrap:wrap; justify-content:center;}
-.pelicula { display:inline-block; margin:20px; text-align:center; width:200px; position:relative;}
-.pelicula img { width:100%; border-radius:8px; box-shadow:0 4px 10px rgba(0,0,0,0.5);}
-.pelicula p { margin-top:8px; font-size:1.05em; color:white; font-weight:normal;}
+
+/* 🔎 Ajuste de las tarjetas de películas */
+.pelicula { 
+  display:inline-block; 
+  margin:20px; 
+  text-align:center; 
+  width:200px; 
+  position:relative;
+}
+
+.pelicula img { 
+  width:100%; 
+  aspect-ratio: 2 / 3;   /* proporción fija de póster */
+  object-fit: cover;     /* recorta manteniendo proporción */
+  border-radius:8px; 
+  box-shadow:0 4px 10px rgba(0,0,0,0.5);
+}
+
+.pelicula p { 
+  margin-top:8px; 
+  font-size:1.05em; 
+  color:white; 
+  font-weight:normal;
+}
 
 /* 🔎 Ajuste del círculo de calificación */
 .rating-circle { 
   position:absolute; 
   bottom:40px;   /* esquina inferior izquierda */
-  left:-5px;     
+  left:0px;     
   width:48px; 
   height:48px;
   border-radius:50%; 
@@ -23,8 +44,6 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   align-items:center;
   justify-content:center;
 }
-
-
 
 .rating-circle svg { 
   width:48px;
@@ -45,7 +64,6 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 .progress { 
   transition:stroke-dashoffset 1.5s ease; /* animación suave */
 }
-
 
 /* 🔎 Popup con animación */
 .popup { 
@@ -80,7 +98,7 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 /* Tarjetas de géneros */
 .genero-card {
   width:200px;
-  height:300px;
+  aspect-ratio: 2 / 3;   /* proporción fija */
   margin:15px;
   border-radius:10px;
   background-size:cover;
