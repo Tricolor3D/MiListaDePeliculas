@@ -100,6 +100,7 @@ function renderItem(data, type, containerId) {
         <h3>${data.title||data.name}</h3>
         <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
         ${type==="movie"?`<p><strong>Director:</strong> ${data.director}</p>`:""}
+		<p><strong>Reparto:</strong> ${data.actors}</p>
         <p><strong>Género:</strong> ${genres}</p>
         <p><strong>Calificación:</strong> ${parseFloat(data.vote_average).toFixed(1)}</p>
         <p>${data.overview}</p>
@@ -419,6 +420,7 @@ card.addEventListener("mouseleave", () => {
   </script>
 </body>
 </html>
+
 
 
 
