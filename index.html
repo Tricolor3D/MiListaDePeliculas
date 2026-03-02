@@ -113,18 +113,20 @@ function renderItem(data, type, containerId) {
 
  // 🔎 Control del popup con delay
 let popupTimer;
-const card = div; // usar el div completo de la tarjeta
+const card = div;
 const popup = div.querySelector(".popup");
 
 card.addEventListener("mouseenter", () => {
   popupTimer = setTimeout(() => {
-    popup.style.opacity = "1"; // mostrar popup
-  }, 500); // espera 0.5 segundos
+    popup.style.opacity = "1"; 
+    popup.style.transform = "translateY(0)"; // se desliza hacia arriba
+  }, 2000);
 });
 
 card.addEventListener("mouseleave", () => {
   clearTimeout(popupTimer);
-  popup.style.opacity = "0"; // ocultar popup
+  popup.style.opacity = "0"; 
+  popup.style.transform = "translateY(20px)"; // vuelve a bajar
 });
 }
 
@@ -404,6 +406,7 @@ card.addEventListener("mouseleave", () => {
   </script>
 </body>
 </html>
+
 
 
 
