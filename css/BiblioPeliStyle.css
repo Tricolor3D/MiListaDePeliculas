@@ -12,16 +12,19 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 /* 🔎 Ajuste del círculo de calificación */
 .rating-circle { 
   position:absolute; 
-  bottom:40px;   /* más arriba que antes */
-  left:0px;     /* separado del borde */
+  bottom:10px;   /* esquina inferior izquierda */
+  left:10px;     
   width:48px; 
   height:48px;
+  background:rgba(0,0,0,0.6); /* sombreado detrás */
+  border-radius:50%;          /* círculo perfecto */
+  box-shadow:0 0 6px rgba(0,0,0,0.8); /* sombra para destacar */
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.rating-circle svg { transform:rotate(-90deg);}
-.rating-text { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:0.8em; font-weight:bold; color:white;}
-.progress { transition:stroke-dashoffset 1.5s ease;}
 
-/* 🔎 Popup oculto por defecto, controlado con JS */
+/* 🔎 Popup con animación */
 .popup { 
   position:absolute; 
   bottom:30%; 
@@ -32,7 +35,8 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   backdrop-filter:blur(8px);
   color:white; 
   opacity:0; /* oculto por defecto */
-  transition:opacity 0.3s ease; 
+  transform:translateY(20px); /* empieza un poco más abajo */
+  transition:opacity 0.4s ease, transform 0.4s ease; 
   border-radius:8px; 
   padding:10px; 
   box-sizing:border-box; 
