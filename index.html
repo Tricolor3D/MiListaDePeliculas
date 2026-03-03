@@ -101,10 +101,13 @@ function renderItem(data, type, containerId) {
         <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
         ${type==="movie"?`<p><strong>Director:</strong> ${data.director}</p>`:""}
 		<p><strong>Reparto:</strong> ${data.actors}</p>
-        <p><strong>Género:</strong> ${genres}</p>
-        <p><strong>Calificación:</strong> ${parseFloat(data.vote_average).toFixed(1)}</p>
-        <p>${data.overview}</p>
-      </div>
+<p><strong>Género:</strong> ${data.genres}</p>
+<p>
+  <strong>Calificación:</strong> ${parseFloat(data.vote_average).toFixed(1)} 
+  | <strong>Ubicación:</strong> ${data.ubicacion}
+</p>
+<p>${data.overview}</p>
+</div>
     </a>`;
 
   document.getElementById(containerId).appendChild(div);
@@ -425,6 +428,7 @@ function limpiarBusqueda(){
   </script>
 </body>
 </html>
+
 
 
 
