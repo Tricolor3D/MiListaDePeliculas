@@ -52,11 +52,13 @@
   <div id="contenedor" class="contenedor"></div>
 
   <!-- Paginación -->
-  <div class="paginacion">
-    <button onclick="paginaAnterior()">Anterior</button>
-    <span id="paginaActual">1</span>
-    <button onclick="paginaSiguiente()">Siguiente</button>
-  </div>
+<div class="paginacion">
+  <button onclick="irInicio()">Inicio</button>
+  <button onclick="paginaAnterior()">Anterior</button>
+  <span id="paginaInfo">Página 1 de 1</span>
+  <button onclick="paginaSiguiente()">Siguiente</button>
+  <button onclick="irFinal()">Final</button>
+</div>
 
   <script>
     let peliculas = [];
@@ -65,6 +67,68 @@
     let itemsPorPagina = 30; // ahora mostramos 30 por página
     let modo = "peliculas"; 
     let modoAnterior = "peliculas";
+	  function mostrarPeliculas() {
+  modo = "peliculas";
+  const inicio = (pagina - 1) * itemsPorPagina;
+  const fin = inicio + itemsPorPagina;
+  const paginaItems = peliculas.slice(inicio, fin);
+
+  const contenedor = document.getElementById("contenedor");
+  contenedor.innerHTML = "";
+
+  paginaItems.forEach(p => renderItem(p, "movie", "contenedor"));
+
+  actualizarInfoPaginacion(peliculas.length);
+}
+
+function mostrarSeries() {
+  modo = "series";
+  const inicio = (pagina - 1) * itemsPorPagina;
+  const fin = inicio + itemsPorPagina;
+  const paginaItems = series.slice(inicio, fin);
+
+  const contenedor = document.getElementById("contenedor");
+  contenedor.innerHTML = "";
+
+  paginaItems.forEach(s => renderItem(s, "tv", "contenedor"));
+
+  actualizarInfoPaginacion(series.length);
+}
+
+function actualizarInfoPaginacion(totalItems) {
+  const totalPaginas = Math.ceil(totalItems / itemsPorPagina) || 1;
+  document.getElementById("paginaInfo").textContent =
+    `Página ${pagina} de ${totalPaginas}`;
+}
+
+function paginaAnterior() {
+  if (pagina > 1) {
+    pagina--;
+    modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
+  }
+}
+
+function paginaSiguiente() {
+  const totalItems = modo === "peliculas" ? peliculas.length : series.length;
+  const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+  if (pagina < totalPaginas) {
+    pagina++;
+    modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
+  }
+}
+
+function irInicio() {
+  pagina = 1;
+  modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
+}
+
+function irFinal() {
+  const totalItems = modo === "peliculas" ? peliculas.length : series.length;
+  const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+  pagina = totalPaginas;
+  modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
+}
+	  
 
     // Nueva función para cargar datos desde CSV usando PapaParse
     async function cargarCSV(ruta) {
@@ -455,6 +519,7 @@ function limpiarBusqueda(){
   </script>
 </body>
 </html>
+
 
 
 
