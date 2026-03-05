@@ -12,33 +12,33 @@
   <h1>Mi Lista de Películas y Series</h1>
 
   <!-- Barra de búsqueda -->
-<div class="buscador">
-  <div class="input-wrapper">
-    <!-- Ícono lupa -->
-    <svg class="icon lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16">
-      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 
-      1.415-1.414l-3.85-3.85zm-5.242 1.656a5.5 5.5 0 1 1 
-      0-11 5.5 5.5 0 0 1 0 11z"/>
-    </svg>
+  <div class="buscador">
+    <div class="input-wrapper">
+      <!-- Ícono lupa -->
+      <svg class="icon lupa" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 
+        1.415-1.414l-3.85-3.85zm-5.242 1.656a5.5 5.5 0 1 1 
+        0-11 5.5 5.5 0 0 1 0 11z"/>
+      </svg>
 
-    <input type="text" id="campoBusqueda" placeholder="Buscar Película, Serie, Nombre, Año, Género, Director..." oninput="buscar()">
+      <input type="text" id="campoBusqueda" placeholder="Buscar Película, Serie, Nombre, Año, Género, Director..." oninput="buscar()">
 
-    <!-- Ícono X -->
-    <svg class="icon borrar" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16" onclick="limpiarBusqueda()">
-      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 
-      7.293l2.646-2.647a.5.5 0 0 1 
-      .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 
-      8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 
-      8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-    </svg>
+      <!-- Ícono X -->
+      <svg class="icon borrar" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16" onclick="limpiarBusqueda()">
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 
+        7.293l2.646-2.647a.5.5 0 0 1 
+        .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 
+        8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 
+        8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+      </svg>
+    </div>
+
+    <select id="ordenarPor" onchange="buscar()">
+      <option value="">Ordenar...</option>
+      <option value="titulo">Título A-Z</option>
+      <option value="anio">Año</option>
+    </select>
   </div>
-
-  <select id="ordenarPor" onchange="buscar()">
-    <option value="">Ordenar...</option>
-    <option value="titulo">Título A-Z</option>
-    <option value="anio">Año</option>
-  </select>
-</div>
 
   <!-- Menú superior -->
   <div class="menu">
@@ -52,91 +52,23 @@
   <div id="contenedor" class="contenedor"></div>
 
   <!-- Paginación -->
-  <!-- Paginación -->
-<div class="paginacion">
-  <button onclick="irInicio()">Inicio</button>
-  <button onclick="paginaAnterior()">Anterior</button>
-  <span id="paginaInfo">Página 1 de 1</span>
-  <button onclick="paginaSiguiente()">Siguiente</button>
-  <button onclick="irFinal()">Final</button>
-</div>
+  <div class="paginacion">
+    <button onclick="irInicio()">Inicio</button>
+    <button onclick="paginaAnterior()">Anterior</button>
+    <span id="paginaInfo">Página 1 de 1</span>
+    <button onclick="paginaSiguiente()">Siguiente</button>
+    <button onclick="irFinal()">Final</button>
+  </div>
 
-<script>
-  let peliculas = [];
-  let series = [];
-  let generos = [];
-  let recientes = [];
-  let pagina = 1;
-  let itemsPorPagina = 30;
-  let modo = "peliculas";
-
-  
-  function renderPagina(lista, tipo) {
-    const inicio = (pagina - 1) * itemsPorPagina;
-    const fin = inicio + itemsPorPagina;
-    const paginaItems = lista.slice(inicio, fin);
-
-    const contenedor = document.getElementById("contenedor");
-    contenedor.innerHTML = "";
-
-    paginaItems.forEach(item => renderItem(item, tipo, "contenedor"));
-
-    actualizarInfoPaginacion(lista.length);
-  }
-
-  function actualizarInfoPaginacion(totalItems) {
-    const totalPaginas = Math.ceil(totalItems / itemsPorPagina) || 1;
-    document.getElementById("paginaInfo").textContent =
-      `Página ${pagina} de ${totalPaginas}`;
-  }
-
-  function paginaAnterior() {
-    if (pagina > 1) {
-      pagina--;
-      refrescarModo();
-    }
-  }
-
-  function paginaSiguiente() {
-    const totalItems = obtenerListaActual().length;
-    const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
-    if (pagina < totalPaginas) {
-      pagina++;
-      refrescarModo();
-    }
-  }
-
-  function irInicio() {
-    pagina = 1;
-    refrescarModo();
-  }
-
-  function irFinal() {
-    const totalItems = obtenerListaActual().length;
-    const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
-    pagina = totalPaginas;
-    refrescarModo();
-  }
-
-  function obtenerListaActual() {
-    switch (modo) {
-      case "peliculas": return peliculas;
-      case "series": return series;
-      case "generos": return generos;
-      case "recientes": return recientes;
-      default: return [];
-    }
-  }
-
-  function refrescarModo() {
-    switch (modo) {
-      case "peliculas": renderPagina(peliculas, "movie"); break;
-      case "series": renderPagina(series, "tv"); break;
-      case "generos": renderPagina(generos, "movie"); break;
-      case "recientes": renderPagina(recientes, "movie"); break;
-    }
-  }
-</script>
+  <script>
+    let peliculas = [];
+    let series = [];
+    let generos = [];
+    let recientes = [];
+    let pagina = 1;
+    let itemsPorPagina = 30; // ahora mostramos 30 por página
+    let modo = "peliculas"; 
+    let modoAnterior = "peliculas";
 
     // Nueva función para cargar datos desde CSV usando PapaParse
     async function cargarCSV(ruta) {
@@ -145,79 +77,69 @@
       const resultado = Papa.parse(texto, {header:true, skipEmptyLines:true});
       return resultado.data; // devuelve array de objetos con claves = encabezados
     }
-	        /// Renderizar tarjeta de película/serie
-function renderItem(data, type, containerId) {
-  const rating = parseFloat(data.vote_average) * 10;
-  const radius = 20;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (rating/100)*circumference;
-  let color = rating>=70 ? "#21d07a" : rating>=40 ? "#d2d531" : "#db2360";
-  const genres = data.genres || "";
+	    // Renderizar tarjeta de película/serie
+    function renderItem(data, type, containerId) {
+      const rating = parseFloat(data.vote_average) * 10;
+      const radius = 20;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (rating/100)*circumference;
+      let color = rating>=70 ? "#21d07a" : rating>=40 ? "#d2d531" : "#db2360";
 
-  const div = document.createElement("div");
-  div.className="pelicula";
-  div.innerHTML=`
-    <a href="https://www.themoviedb.org/${type}/${data.id}" target="_blank">
-      <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title||data.name}">
-      <p>${data.title||data.name}</p>
-      <div class="rating-circle">
-        <svg width="48" height="48">
-          <circle cx="24" cy="24" r="${radius}" stroke="#444" stroke-width="3" fill="black"/>
-          <circle class="progress" cx="24" cy="24" r="${radius}" stroke="${color}" stroke-width="3" fill="transparent"
-            stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"/>
-        </svg>
-        <div class="rating-text">${parseFloat(data.vote_average).toFixed(1)}</div>
-      </div>
-      <div class="popup">
-        <h3>${data.title||data.name}</h3>
-        <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
-        ${type==="movie"?`<p><strong>Director:</strong> ${data.director}</p>`:""}
-		<p><strong>Reparto:</strong> ${data.actors}</p>
-<p><strong>Género:</strong> ${data.genres}</p>
-<p>
-  <strong>Calificación:</strong> ${parseFloat(data.vote_average).toFixed(1)} 
-  | <strong>Ubicación:</strong> ${data.ubicacion}
-</p>
-<p>${data.overview}</p>
-</div>
-    </a>`;
+      const div = document.createElement("div");
+      div.className="pelicula";
+      div.innerHTML=`
+        <a href="https://www.themoviedb.org/${type}/${data.id}" target="_blank">
+          <img src="https://image.tmdb.org/t/p/w300${data.poster_path}" alt="${data.title||data.name}">
+          <p>${data.title||data.name}</p>
+          <div class="rating-circle">
+            <svg width="48" height="48">
+              <circle cx="24" cy="24" r="${radius}" stroke="#444" stroke-width="3" fill="black"/>
+              <circle class="progress" cx="24" cy="24" r="${radius}" stroke="${color}" stroke-width="3" fill="transparent"
+                stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"/>
+            </svg>
+            <div class="rating-text">${parseFloat(data.vote_average).toFixed(1)}</div>
+          </div>
+          <div class="popup">
+            <h3>${data.title||data.name}</h3>
+            <p><strong>Estreno:</strong> ${data.release_date||data.first_air_date}</p>
+            ${type==="movie"?`<p><strong>Director:</strong> ${data.director}</p>`:""}
+            <p><strong>Reparto:</strong> ${data.actors}</p>
+            <p><strong>Género:</strong> ${data.genres}</p>
+            <p><strong>Calificación:</strong> ${parseFloat(data.vote_average).toFixed(1)} | <strong>Ubicación:</strong> ${data.ubicacion}</p>
+            <p>${data.overview}</p>
+          </div>
+        </a>`;
 
-  document.getElementById(containerId).appendChild(div);
+      document.getElementById(containerId).appendChild(div);
 
-  // animación del círculo
-  setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
+      // animación del círculo
+      setTimeout(()=>{div.querySelector(".progress").setAttribute("stroke-dashoffset",offset);},100);
 
- // 🔎 Control del popup con delay
-let popupTimer;
-const card = div;
-const popup = div.querySelector(".popup");
+      // Control del popup con delay
+      let popupTimer;
+      const card = div;
+      const popup = div.querySelector(".popup");
 
-card.addEventListener("mouseenter", () => {
-  popupTimer = setTimeout(() => {
-    // Detectar posición de la tarjeta
-    const rect = card.getBoundingClientRect();
-    const espacioDerecha = window.innerWidth - rect.right;
+      card.addEventListener("mouseenter", () => {
+        popupTimer = setTimeout(() => {
+          const rect = card.getBoundingClientRect();
+          const espacioDerecha = window.innerWidth - rect.right;
+          if (espacioDerecha < 300) {
+            popup.classList.add("right");
+          } else {
+            popup.classList.remove("right");
+          }
+          popup.style.opacity = "1"; 
+          popup.style.transform = "translateY(0)";
+        }, 1000);
+      });
 
-    if (espacioDerecha < 300) {
-      // Si no hay espacio suficiente a la derecha, abrir hacia el otro lado
-      popup.classList.add("right");
-    } else {
-      popup.classList.remove("right");
+      card.addEventListener("mouseleave", () => {
+        clearTimeout(popupTimer);
+        popup.style.opacity = "0"; 
+        popup.style.transform = "translateY(20px)";
+      });
     }
-
-    popup.style.opacity = "1"; 
-    popup.style.transform = "translateY(0)";
-  }, 1000);
-});
-
-card.addEventListener("mouseleave", () => {
-  clearTimeout(popupTimer);
-  popup.style.opacity = "0"; 
-  popup.style.transform = "translateY(20px)";
-});
-
-
-}
 
     // Función para convertir una fila CSV en objeto película
     function filaAPelicula(cols) {
@@ -244,64 +166,39 @@ card.addEventListener("mouseleave", () => {
         poster_path: cols[5],
         overview: cols[6]
       };
-    }    // Mostrar películas
+    }
+
+    // Mostrar películas
     function mostrarPeliculas(){
-  modo = "peliculas";
-  document.getElementById("tituloSeccion").textContent = "Películas";
-  document.getElementById("contenedor").innerHTML = "";
-
-  // Calcular rango según la página actual
-  const inicio = (pagina - 1) * itemsPorPagina;
-  const fin = inicio + itemsPorPagina;
-
-  // Cortar el array de películas
-  const paginaPeliculas = peliculas.slice(inicio, fin);
-
-  // Renderizar solo esa página
-  paginaPeliculas.forEach(peli => {
-    renderItem(peli, "movie", "contenedor");
-  });
-
-  // Actualizar número de página
-  document.getElementById("paginaActual").textContent = pagina;
-}
-
-
+      modo = "peliculas";
+      pagina = 1;
+      document.getElementById("tituloSeccion").textContent = "Películas";
+      renderPagina(peliculas, "movie");
+    }
 
     // Mostrar series
     function mostrarSeries(){
-  modo = "series";
-  document.getElementById("tituloSeccion").textContent = "Series";
-  document.getElementById("contenedor").innerHTML = "";
-
-  const inicio = (pagina - 1) * itemsPorPagina;
-  const fin = inicio + itemsPorPagina;
-
-  const paginaSeries = series.slice(inicio, fin);
-
-  paginaSeries.forEach(serie => {
-    renderItem(serie, "tv", "contenedor");
-  });
-
-  document.getElementById("paginaActual").textContent = pagina;
-}
-
+      modo = "series";
+      pagina = 1;
+      document.getElementById("tituloSeccion").textContent = "Series";
+      renderPagina(series, "tv");
+    }
 
     // Mostrar recientes (ordenados por fecha)
     function mostrarRecientes(){
       modo="recientes";
+      pagina=1;
       document.getElementById("tituloSeccion").textContent="Recientes";
-      document.getElementById("contenedor").innerHTML="";
       let items = (modoAnterior==="series"?series:peliculas);
       items.sort((a,b)=>(b.release_date||b.first_air_date).localeCompare(a.release_date||a.first_air_date));
-      items.slice(0,30).forEach(item=>{
-        renderItem(item,modoAnterior==="series"?"tv":"movie","contenedor");
-      });
+      recientes = items.slice(0,30);
+      renderPagina(recientes, modoAnterior==="series"?"tv":"movie");
     }
 
-    // Mostrar géneros (usando los géneros ya presentes en CSV)
+    // Mostrar géneros
     function mostrarGeneros(){
       modo="generos";
+      pagina=1;
       document.getElementById("tituloSeccion").textContent="Géneros";
       document.getElementById("contenedor").innerHTML="";
 
@@ -320,7 +217,6 @@ card.addEventListener("mouseleave", () => {
         "Western":"https://image.tmdb.org/t/p/original/eUZbn652KXfWMwh6Oe4PdeJfKuS.jpg"
       };
 
-      // Extraer géneros únicos de películas y series
       const todosGeneros = [...peliculas.map(p=>p.genres), ...series.map(s=>s.genres)];
       const nombresIncluidos = new Set();
       const generosUnicos = [];
@@ -357,199 +253,189 @@ card.addEventListener("mouseleave", () => {
       generoActualNombre=nombreGenero;
       document.getElementById("tituloSeccion").textContent="Género: "+nombreGenero;
       cargarPorGenero(nombreGenero);
-      mostrarPaginaGenero();
+      renderPagina(resultadosGenero, "movie");
     }
 
     function cargarPorGenero(nombreGenero){
       resultadosGenero = [...peliculas, ...series].filter(item=>item.genres && item.genres.includes(nombreGenero));
     }
-
-    function mostrarPaginaGenero(){
+	    // Mostrar página actual (optimizado: carga solo 30 ítems)
+    function renderPagina(lista, tipo) {
       document.getElementById("contenedor").innerHTML="";
       let inicio = (pagina-1)*itemsPorPagina;
       let fin = inicio+itemsPorPagina;
-      let paginaItems = resultadosGenero.slice(inicio,fin);
+      let paginaItems = lista.slice(inicio,fin);
 
       paginaItems.forEach(item=>{
-        renderItem(item,item.title?"movie":"tv","contenedor");
+        renderItem(item,tipo,"contenedor");
       });
 
-      document.getElementById("paginaActual").textContent=pagina;
+      actualizarInfoPaginacion(lista.length);
     }
-	        // Paginación anterior
-   function paginaAnterior(){
-  if(pagina > 1){
-    pagina--;
-    if(modo === "peliculas") mostrarPeliculas();
-    else if(modo === "series") mostrarSeries();
-    else if(modo === "generos") mostrarGeneros();
-    else mostrarRecientes();
 
-    // 🔝 Llevar al inicio
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-}
-
-    // Paginación siguiente
-   function paginaSiguiente(){
-  pagina++;
-  if(modo === "peliculas") mostrarPeliculas();
-  else if(modo === "series") mostrarSeries();
-  else if(modo === "generos") mostrarGeneros();
-  else mostrarRecientes();
-
-  // 🔝 Llevar al inicio
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-
-    // Mostrar página actual (optimizado: carga solo 30 ítems)
-    function mostrarPagina(){
-      document.getElementById("contenedor").innerHTML="";
-      let items = (modo==="peliculas"?peliculas:series);
-      let inicio = (pagina-1)*itemsPorPagina;
-      let fin = inicio+itemsPorPagina;
-      let paginaItems = items.slice(inicio,fin);
-
-      paginaItems.forEach(item=>{
-        renderItem(item,modo==="series"?"tv":"movie","contenedor");
-      });
-
-      document.getElementById("paginaActual").textContent=pagina;
+    function actualizarInfoPaginacion(totalItems) {
+      const totalPaginas = Math.ceil(totalItems / itemsPorPagina) || 1;
+      document.getElementById("paginaInfo").textContent =
+        `Página ${pagina} de ${totalPaginas}`;
     }
-	   /* 🔎 Bloque del buscador */
+
+    /* 🔎 Bloque del buscador */
     function buscar(){
-  const query = document.getElementById("campoBusqueda").value.toLowerCase().trim();
-  const ordenar = document.getElementById("ordenarPor").value;
+      const query = document.getElementById("campoBusqueda").value.toLowerCase().trim();
+      const ordenar = document.getElementById("ordenarPor").value;
 
-  if(!query && !ordenar){
-    if(modo === "peliculas"){
-      mostrarPeliculas();
-    } else if(modo === "series"){
-      mostrarSeries();
-    } else {
-      mostrarPeliculas(); // por defecto
+      if(!query && !ordenar){
+        if(modo === "peliculas"){
+          mostrarPeliculas();
+        } else if(modo === "series"){
+          mostrarSeries();
+        } else {
+          mostrarPeliculas(); // por defecto
+        }
+        return;
+      }
+
+      document.getElementById("tituloSeccion").textContent = "Resultados de búsqueda";
+      document.getElementById("contenedor").innerHTML = "";
+
+      // Usar solo el array según el modo actual
+      let items = [];
+      if(modo === "peliculas"){
+        items = [...peliculas];
+      } else if(modo === "series"){
+        items = [...series];
+      } else {
+        items = [...peliculas, ...series]; // fallback si estás en otra vista
+      }
+
+      // Filtrar resultados
+      let resultados = items.filter(item => {
+        const titulo = (item.title || item.name || "").toLowerCase();
+        const fecha = (item.release_date || item.first_air_date || "");
+        const genero = (item.genres || "").toLowerCase();
+        const director = (item.director || "").toLowerCase();
+        const actores = (item.actors || "").toLowerCase();
+
+        return titulo.includes(query) || 
+               fecha.includes(query) || 
+               genero.includes(query) || 
+               director.includes(query) || 
+               actores.includes(query);
+      });
+
+      // Ordenar resultados
+      if(ordenar === "titulo"){
+        resultados.sort((a,b)=>(a.title||a.name).localeCompare(b.title||b.name));
+      } else if(ordenar === "anio"){
+        resultados.sort((a,b)=>(a.release_date||a.first_air_date).localeCompare(b.release_date||b.first_air_date));
+      }
+
+      // Mostrar resultados
+      if(resultados.length === 0){
+        document.getElementById("contenedor").innerHTML = "<p>No se encontraron resultados.</p>";
+      } else {
+        resultados.forEach(item=>{
+          renderItem(item, item.title?"movie":"tv", "contenedor");
+        });
+      }
+
+      pagina = 1;
+      actualizarInfoPaginacion(resultados.length);
     }
-    return;
-  }
 
-  document.getElementById("tituloSeccion").textContent = "Resultados de búsqueda";
-  document.getElementById("contenedor").innerHTML = "";
+    function limpiarBusqueda(){
+      document.getElementById("campoBusqueda").value = "";
+      document.getElementById("ordenarPor").value = "";
+      pagina = 1;
+      mostrarPeliculas();
+    }
+	    // Funciones de navegación de páginas
+    function paginaAnterior(){
+      if(pagina > 1){
+        pagina--;
+        refrescarModo();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
 
- // 🔎 Usar solo el array según el modo actual
-let items = [];
-if(modo === "peliculas"){
-  items = [...peliculas];
-} else if(modo === "series"){
-  items = [...series];
-} else {
-  items = [...peliculas, ...series]; // fallback si estás en otra vista
-}
+    function paginaSiguiente(){
+      const totalItems = obtenerListaActual().length;
+      const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+      if(pagina < totalPaginas){
+        pagina++;
+        refrescarModo();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
 
-// Filtrar resultados
-let resultados = items.filter(item => {
-  const titulo = (item.title || item.name || "").toLowerCase();
-  const fecha = (item.release_date || item.first_air_date || "");
-  const genero = (item.genres || "").toLowerCase();
-  const director = (item.director || "").toLowerCase();
-  const actores = (item.actors || "").toLowerCase(); // 🔎 nueva línea
+    function irInicio(){
+      pagina = 1;
+      refrescarModo();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-  return titulo.includes(query) || 
-         fecha.includes(query) || 
-         genero.includes(query) || 
-         director.includes(query) || 
-         actores.includes(query); // 🔎 búsqueda por actor
-});
+    function irFinal(){
+      const totalItems = obtenerListaActual().length;
+      const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+      pagina = totalPaginas;
+      refrescarModo();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-// Ordenar resultados
-if(ordenar === "titulo"){
-  resultados.sort((a,b)=>(a.title||a.name).localeCompare(b.title||b.name));
-} else if(ordenar === "anio"){
-  resultados.sort((a,b)=>(a.release_date||a.first_air_date).localeCompare(b.release_date||b.first_air_date));
-}
+    function obtenerListaActual(){
+      switch (modo) {
+        case "peliculas": return peliculas;
+        case "series": return series;
+        case "generos": return resultadosGenero;
+        case "recientes": return recientes;
+        default: return [];
+      }
+    }
 
-// Mostrar resultados
-if(resultados.length === 0){
-  document.getElementById("contenedor").innerHTML = "<p>No se encontraron resultados.</p>";
-} else {
-  resultados.forEach(item=>{
-    renderItem(item, item.title?"movie":"tv", "contenedor");
-  });
-}
+    function refrescarModo(){
+      switch (modo) {
+        case "peliculas": renderPagina(peliculas, "movie"); break;
+        case "series": renderPagina(series, "tv"); break;
+        case "generos": renderPagina(resultadosGenero, "movie"); break;
+        case "recientes": renderPagina(recientes, "movie"); break;
+      }
+    }
 
-pagina = 1;
-document.getElementById("paginaActual").textContent = pagina;
-}
-
-function limpiarBusqueda(){
-  document.getElementById("campoBusqueda").value = "";
-  document.getElementById("ordenarPor").value = "";
-  pagina = 1;
-  mostrarPeliculas();
-}
-  
-	        // Inicialización optimizada con PapaParse
+    // Inicialización optimizada con PapaParse
     (async function(){
-  // Cargar CSV de películas y series
-  const peliculasRaw = await cargarCSV("peliculas.csv");
-  const seriesRaw = await cargarCSV("series.csv");
+      // Cargar CSV de películas y series
+      const peliculasRaw = await cargarCSV("peliculas.csv");
+      const seriesRaw = await cargarCSV("series.csv");
 
-  // Mapear columnas para asegurar que todas las propiedades existen
-  peliculas = peliculasRaw.map(item => ({
-    id: item.id,
-    title: item.title,
-    release_date: item.release_date,
-    director: item.director,
-    actors: item.actors,
-    genres: item.genres,
-    vote_average: item.vote_average,
-    poster_path: item.poster_path,
-    overview: item.overview,
-    ubicacion: item.ubicacion   // 🔎 ahora sí se incluye
-  }));
+      // Mapear columnas para asegurar que todas las propiedades existen
+      peliculas = peliculasRaw.map(item => ({
+        id: item.id,
+        title: item.title,
+        release_date: item.release_date,
+        director: item.director,
+        actors: item.actors,
+        genres: item.genres,
+        vote_average: item.vote_average,
+        poster_path: item.poster_path,
+        overview: item.overview,
+        ubicacion: item.ubicacion
+      }));
 
-  series = seriesRaw.map(item => ({
-    id: item.id,
-    name: item.name,
-    first_air_date: item.first_air_date,
-    actors: item.actors,
-    genres: item.genres,
-    vote_average: item.vote_average,
-    poster_path: item.poster_path,
-    overview: item.overview,
-    ubicacion: item.ubicacion   // 🔎 también aquí
-  }));
+      series = seriesRaw.map(item => ({
+        id: item.id,
+        name: item.name,
+        first_air_date: item.first_air_date,
+        actors: item.actors,
+        genres: item.genres,
+        vote_average: item.vote_average,
+        poster_path: item.poster_path,
+        overview: item.overview,
+        ubicacion: item.ubicacion
+      }));
 
-  // Arrancamos mostrando películas
-  mostrarPeliculas();
-})();
-
+      // Arrancamos mostrando películas
+      mostrarPeliculas();
+    })();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
