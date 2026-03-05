@@ -22,6 +22,31 @@ h1 {
   gap: 20px; 
   margin: 20px 0;
 }
+.encabezado {
+  background-image: url("Banner4.png");
+  background-size: cover;       /* que llene todo el ancho */
+  background-position: center;  /* centrada */
+  background-repeat: no-repeat;
+  padding: 40px 20px;           /* espacio interno para que se vea */
+  border-radius: 12px;
+  position: relative;
+}
+
+/* opcional: overlay translúcido para que el texto se lea mejor */
+.encabezado::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(13, 37, 63, 0.6); /* azul translúcido encima */
+  border-radius: 12px;
+}
+
+.encabezado > * {
+  position: relative;
+  z-index: 1;
+  color: #fff; /* texto blanco para contraste */
+}
+
 
 /* Botones del menú */
 .menu button {
@@ -53,48 +78,6 @@ h2 {
   display: flex; 
   flex-wrap: wrap; 
   justify-content: center;
-}
-.banner {
-  position: relative;
-  width: 100%;
-  height: 220px; /* ajusta según prefieras */
-  margin: 20px 0;
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.5; /* transparencia para que se vea el fondo azul */
-}
-
-.banner-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  text-align: center;
-  backdrop-filter: blur(4px); /* efecto glass elegante */
-}
-
-.banner-overlay h2 {
-  font-size: 2em;
-  margin: 0;
-  color: var(--accent-color); /* usa tu azul suave */
-}
-
-.banner-overlay p {
-  font-size: 1.2em;
-  margin-top: 8px;
-  color: #f0f0f0;
 }
 
 
