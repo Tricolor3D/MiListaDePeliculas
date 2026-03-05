@@ -66,8 +66,8 @@
   let generos = [];
   let recientes = [];
   let pagina = 1;
-  let itemsPorPagina = 30; // cantidad de ítems por página
-  let modo = "peliculas"; 
+  let itemsPorPagina = 30;
+  let modo = "peliculas";
 
   function mostrarPeliculas() {
     modo = "peliculas";
@@ -86,14 +86,14 @@
   function mostrarGeneros() {
     modo = "generos";
     pagina = 1;
-    renderPagina(generos, "movie"); // o "tv" según cómo armes tu array
+    renderPagina(generos, "movie");
     document.getElementById("tituloSeccion").textContent = "Géneros";
   }
 
   function mostrarRecientes() {
     modo = "recientes";
     pagina = 1;
-    renderPagina(recientes, "movie"); // o "tv" según tu array
+    renderPagina(recientes, "movie");
     document.getElementById("tituloSeccion").textContent = "Recientes";
   }
 
@@ -554,6 +554,7 @@ function limpiarBusqueda(){
   </script>
 </body>
 </html>
+
 
 
 
