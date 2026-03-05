@@ -1,135 +1,217 @@
-body { font-family:"Segoe UI",Arial,sans-serif; background:#0d253f; color:white; margin:20px;}
-h1 { text-align:center; color:#01b4e4; font-size:2.5em;}
-.menu { display:flex; justify-content:center; gap:20px; margin:20px 0;}
-.menu button { background:#01b4e4; border:none; padding:10px 20px; border-radius:5px; color:white; cursor:pointer; font-weight:bold;}
-.menu button:hover { background:#0288a7;}
-h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
-.contenedor { display:flex; flex-wrap:wrap; justify-content:center;}
-
-/* 🔎 Ajuste de las tarjetas de películas */
-.pelicula { 
-  display:inline-block; 
-  margin:20px; 
-  text-align:center; 
-  width:200px; 
-  position:relative;
+body { 
+  font-family: "Segoe UI", Arial, sans-serif; 
+  background: #0d253f; 
+  color: white; 
+  margin: 20px;
 }
 
-.pelicula img { 
-  width:100%; 
-  aspect-ratio: 2 / 3;   /* proporción fija de póster */
-  object-fit: cover;     /* recorta manteniendo proporción */
-  border-radius:8px; 
-  box-shadow:0 4px 10px rgba(0,0,0,0.5);
+h1 { 
+  text-align: center; 
+  color: #01b4e4; 
+  font-size: 2.5em;
 }
 
-.pelicula p { 
-  margin-top:8px; 
-  font-size:1.05em; 
-  color:white; 
-  font-weight:normal;
+.menu { 
+  display: flex; 
+  justify-content: center; 
+  gap: 20px; 
+  margin: 20px 0;
 }
 
-/* 🔎 Ajuste del círculo de calificación */
-.rating-circle { 
-  position:absolute; 
-  bottom:55px;   /* esquina inferior izquierda */
-  left:-5px;     
-  width:48px; 
-  height:48px;
-  border-radius:50%; 
-  background:rgba(0,0,0,0.4); /* fondo semitransparente */
-  box-shadow:0 0 6px rgba(0,0,0,0.8); /* sombra para separarlo del póster */
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.menu button { 
+  background: #1e1e1e;       /* gris oscuro plano */
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 6px; 
+  color: white; 
+  cursor: pointer; 
+  font-weight: 500; 
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
-.rating-circle svg { 
-  width:48px;
-  height:48px;
-  transform:rotate(-90deg);
+.menu button:hover { 
+  background: #01b4e4;        /* azul acento */
+  transform: translateY(-2px);
 }
 
-.rating-text { 
-  position:absolute; 
-  top:50%; 
-  left:50%; 
-  transform:translate(-50%,-50%); 
-  font-size:0.8em; 
-  font-weight:bold; 
-  color:white;
+h2 { 
+  color: #01b4e4; 
+  font-size: 2em; 
+  margin-top: 20px;
 }
 
-.progress { 
-  transition:stroke-dashoffset 1.5s ease; /* animación suave */
+.contenedor { 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center;
 }
 
-/* 🔎 Popup con animación */
-/* Popup normal (se abre hacia la izquierda) */
+/* Tarjetas de películas */
+.pelicula {  
+  display: inline-block;  
+  margin: 20px;  
+  text-align: center;  
+  width: 200px;  
+  position: relative;
+}
+
+.pelicula img {  
+  width: 100%;  
+  aspect-ratio: 2 / 3;   
+  object-fit: cover;     
+  border-radius: 10px;  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease;
+}
+
+.pelicula img:hover {
+  transform: scale(1.03);
+}
+
+.pelicula p {  
+  margin-top: 8px;  
+  font-size: 1.05em;  
+  color: white;  
+  font-weight: 400;
+}
+
+/* Círculo de calificación */
+.rating-circle {  
+  position: absolute;  
+  bottom: 55px;   
+  left: -5px;     
+  width: 48px;  
+  height: 48px;
+  border-radius: 50%;  
+  background: rgba(0,0,0,0.5); 
+  box-shadow: 0 0 6px rgba(0,0,0,0.8); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rating-circle svg {  
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg);
+}
+
+.rating-text {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%,-50%);  
+  font-size: 0.8em;  
+  font-weight: bold;  
+  color: white;
+}
+
+.progress {  
+  transition: stroke-dashoffset 1.5s ease; 
+}
+/* Popup con animación */
 .popup { 
-  position:absolute; 
-  bottom:30%; 
-  left:0; 
-  width:250%; 
-  height:60%; 
-  background:rgba(0,0,0,0.7); 
-  backdrop-filter:blur(8px);
-  color:white; 
-  opacity:0; 
-  transform:translateY(20px); 
-  transition:opacity 0.4s ease, transform 0.4s ease; 
-  border-radius:8px; 
-  padding:10px; 
-  box-sizing:border-box; 
-  font-size:0.9em; 
-  overflow-y:auto; 
-  z-index:1000;
+  position: absolute; 
+  bottom: 30%; 
+  left: 0; 
+  width: 250%; 
+  height: 60%; 
+  background: rgba(20,20,20,0.85); /* fondo más plano y oscuro */
+  backdrop-filter: blur(10px);
+  color: #fff; 
+  opacity: 0; 
+  transform: translateY(20px); 
+  transition: opacity 0.3s ease, transform 0.3s ease; 
+  border-radius: 10px; 
+  padding: 12px; 
+  box-sizing: border-box; 
+  font-size: 0.9em; 
+  overflow-y: auto; 
+  z-index: 1000;
 }
 
-/* Popup invertido (se abre hacia la derecha) */
 .popup.right { 
-  left:auto; 
-  right:0;   /* se apoya en el borde derecho del póster */
-  width:250%; 
+  left: auto; 
+  right: 0;   
+  width: 250%; 
 }
 
-/* ❌ Eliminamos esta regla para que no aparezca con hover inmediato */
-/* .pelicula:hover .popup { opacity:1; } */
+.popup h3 { 
+  margin: 0; 
+  color: #01b4e4; 
+  font-size: 1em; 
+  font-weight: 500;
+}
+.popup p { 
+  margin: 4px 0; 
+  font-weight: 400;
+}
 
-.popup h3 { margin:0; color:#01b4e4; font-size:1em; font-weight:normal;}
-.popup p { margin:2px 0; font-weight:normal;}
+/* Paginación */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 25px 0;
+}
 
-.paginacion { text-align:center; margin:20px;}
-.paginacion button { background:#01b4e4; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; margin:0 10px;}
-.paginacion button:hover { background:#0288a7;}
+.paginacion button {
+  background: #1e1e1e;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.paginacion button:hover {
+  background: #01b4e4;
+  transform: scale(1.05);
+}
+
+#paginaInfo {
+  font-size: 14px;
+  color: #ccc;
+  align-self: center;
+}
 
 /* Tarjetas de géneros */
 .genero-card {
-  width:200px;
-  aspect-ratio: 2 / 3;   /* proporción fija */
-  margin:15px;
-  border-radius:10px;
-  background-size:cover;
-  background-position:center;
-  position:relative;
-  cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,0.6);
-  transition:transform 0.3s ease;
+  width: 200px;
+  aspect-ratio: 2 / 3;
+  margin: 15px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.genero-card:hover { transform:scale(1.05);}
+.genero-card:hover { 
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+}
 .genero-card .overlay {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  background:rgba(0,0,0,0.7);
-  text-align:center;
-  padding:10px;
-  border-radius:0 0 10px 10px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  text-align: center;
+  padding: 10px;
+  border-radius: 0 0 12px 12px;
 }
-.genero-card p { margin:0; color:#01b4e4; font-weight:bold; font-size:1.2em;}
+.genero-card p { 
+  margin: 0; 
+  color: #01b4e4; 
+  font-weight: 600; 
+  font-size: 1.1em;
+}
 
-/* 🔎 Estilos del buscador con íconos integrados */
+/* Estilos del buscador con íconos integrados */
 .buscador {
   display: flex;
   justify-content: center;
@@ -146,12 +228,16 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
   width: 100%;
   padding: 10px 40px;
   border-radius: 25px;
-  border: 1px solid #555;
+  border: 1px solid #444;
   outline: none;
-  font-size: 16px;
-  background-color: #0d253f;
-  color: white;
+  font-size: 15px;
+  background-color: #1e1e1e;
+  color: #fff;
   box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+.input-wrapper input:focus {
+  border-color: #01b4e4;
 }
 .input-wrapper .icon {
   position: absolute;
@@ -164,8 +250,12 @@ h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
 .buscador select {
   padding: 10px;
   border-radius: 25px;
-  border: 1px solid #555;
+  border: 1px solid #444;
   font-size: 14px;
-  background-color: #0d253f;
-  color: white;
+  background-color: #1e1e1e;
+  color: #fff;
+  transition: border-color 0.3s ease;
+}
+.buscador select:focus {
+  border-color: #01b4e4;
 }
