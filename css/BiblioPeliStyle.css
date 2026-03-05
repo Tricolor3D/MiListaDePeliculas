@@ -1,3 +1,8 @@
+:root {
+  --accent-color: #4a90e2;   /* azul más suave */
+  --accent-hover: #5c7fa3;   /* azul grisáceo para hover */
+}
+
 body { 
   font-family: "Segoe UI", Arial, sans-serif; 
   background: #0d253f; 
@@ -21,10 +26,10 @@ h1 {
 /* Botones del menú */
 .menu button {
   background: transparent;          /* sin fondo sólido */
-  border: 1px solid #01b4e4;        /* borde azul acento */
+  border: 1px solid var(--accent-color);       
   padding: 10px 20px;
   border-radius: 25px;              /* más redondeado, look moderno */
-  color: #01b4e4;                   /* texto azul */
+  color: var(--accent-color);
   font-weight: 500;
   font-size: 14px;
   cursor: pointer;
@@ -32,8 +37,8 @@ h1 {
 }
 
 .menu button:hover {
-  background: #01b4e4;              /* se llena de azul */
-  color: #fff;                      /* texto blanco */
+  background: var(--accent-color);
+  color: #fff;
   transform: translateY(-2px);
 }
 
@@ -162,17 +167,17 @@ h2 {
 /* Botones de paginación */
 .paginacion button {
   background: transparent;
-  border: 1px solid #01b4e4;
+  border: 1px solid var(--accent-color);
   padding: 8px 16px;
   border-radius: 20px;
-  color: #01b4e4;
+  color: var(--accent-color);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .paginacion button:hover {
-  background: #01b4e4;
+  background: var(--accent-hover);
   color: #fff;
   transform: scale(1.05);
 }
@@ -234,18 +239,18 @@ h2 {
   width: 100%;
   padding: 10px 40px;
   border-radius: 25px;
-  border: 1px solid #01b4e4;
+  border: 1px solid var(--accent-color);
   outline: none;
   font-size: 16px;
-  background-color: transparent;    /* sin fondo sólido */
+  background-color: transparent;
   color: #fff;
   box-sizing: border-box;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .input-wrapper input:focus {
-  background-color: rgba(1,180,228,0.1); /* azul translúcido */
-  border-color: #01b4e4;
+  background-color: rgba(74,144,226,0.1); /* azul translúcido suave */
+  border-color: var(--accent-color);
 }
 
 .input-wrapper .icon {
@@ -259,15 +264,15 @@ h2 {
 .buscador select {
   padding: 10px;
   border-radius: 25px;
-  border: 1px solid #01b4e4;
+  border: 1px solid var(--accent-color);
   font-size: 14px;
   background-color: transparent;
-  color: #01b4e4;
+  color: var(--accent-color);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .buscador select:focus {
-  background-color: #01b4e4;
+  background-color: var(--accent-color);
   color: #fff;
 }
 
