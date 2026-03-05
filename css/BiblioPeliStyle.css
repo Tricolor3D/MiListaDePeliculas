@@ -27,7 +27,7 @@ h1 {
   background-size: cover;       /* que llene todo el ancho */
   background-position: center;  /* centrada */
   background-repeat: no-repeat;
-  padding: 40px 20px;           /* espacio interno para que se vea */
+  padding: 40px 20px;           /* espacio interno */
   border-radius: 12px;
   position: relative;
 }
@@ -37,7 +37,7 @@ h1 {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(13, 37, 63, 0.6); /* azul translúcido encima */
+  background-color: rgba(13, 37, 63, 0.6); /* azul translúcido */
   border-radius: 12px;
 }
 
