@@ -51,7 +51,7 @@
   <h2 id="tituloSeccion">Películas</h2>
   <div id="contenedor" class="contenedor"></div>
 
-  <!-- Paginación -->
+ <!-- Paginación -->
 <div class="paginacion">
   <button onclick="irInicio()">Inicio</button>
   <button onclick="paginaAnterior()">Anterior</button>
@@ -60,74 +60,109 @@
   <button onclick="irFinal()">Final</button>
 </div>
 
-  <script>
-    let peliculas = [];
-    let series = [];
-    let pagina = 1;
-    let itemsPorPagina = 30; // ahora mostramos 30 por página
-    let modo = "peliculas"; 
-    let modoAnterior = "peliculas";
-	  function mostrarPeliculas() {
-  modo = "peliculas";
-  const inicio = (pagina - 1) * itemsPorPagina;
-  const fin = inicio + itemsPorPagina;
-  const paginaItems = peliculas.slice(inicio, fin);
+<script>
+  let peliculas = [];
+  let series = [];
+  let generos = [];
+  let recientes = [];
+  let pagina = 1;
+  let itemsPorPagina = 30; // cantidad de ítems por página
+  let modo = "peliculas"; 
 
-  const contenedor = document.getElementById("contenedor");
-  contenedor.innerHTML = "";
-
-  paginaItems.forEach(p => renderItem(p, "movie", "contenedor"));
-
-  actualizarInfoPaginacion(peliculas.length);
-}
-
-function mostrarSeries() {
-  modo = "series";
-  const inicio = (pagina - 1) * itemsPorPagina;
-  const fin = inicio + itemsPorPagina;
-  const paginaItems = series.slice(inicio, fin);
-
-  const contenedor = document.getElementById("contenedor");
-  contenedor.innerHTML = "";
-
-  paginaItems.forEach(s => renderItem(s, "tv", "contenedor"));
-
-  actualizarInfoPaginacion(series.length);
-}
-
-function actualizarInfoPaginacion(totalItems) {
-  const totalPaginas = Math.ceil(totalItems / itemsPorPagina) || 1;
-  document.getElementById("paginaInfo").textContent =
-    `Página ${pagina} de ${totalPaginas}`;
-}
-
-function paginaAnterior() {
-  if (pagina > 1) {
-    pagina--;
-    modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
+  function mostrarPeliculas() {
+    modo = "peliculas";
+    pagina = 1;
+    renderPagina(peliculas, "movie");
+    document.getElementById("tituloSeccion").textContent = "Películas";
   }
-}
 
-function paginaSiguiente() {
-  const totalItems = modo === "peliculas" ? peliculas.length : series.length;
-  const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
-  if (pagina < totalPaginas) {
-    pagina++;
-    modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
+  function mostrarSeries() {
+    modo = "series";
+    pagina = 1;
+    renderPagina(series, "tv");
+    document.getElementById("tituloSeccion").textContent = "Series";
   }
-}
 
-function irInicio() {
-  pagina = 1;
-  modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
-}
+  function mostrarGeneros() {
+    modo = "generos";
+    pagina = 1;
+    renderPagina(generos, "movie"); // o "tv" según cómo armes tu array
+    document.getElementById("tituloSeccion").textContent = "Géneros";
+  }
 
-function irFinal() {
-  const totalItems = modo === "peliculas" ? peliculas.length : series.length;
-  const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
-  pagina = totalPaginas;
-  modo === "peliculas" ? mostrarPeliculas() : mostrarSeries();
-}
+  function mostrarRecientes() {
+    modo = "recientes";
+    pagina = 1;
+    renderPagina(recientes, "movie"); // o "tv" según tu array
+    document.getElementById("tituloSeccion").textContent = "Recientes";
+  }
+
+  function renderPagina(lista, tipo) {
+    const inicio = (pagina - 1) * itemsPorPagina;
+    const fin = inicio + itemsPorPagina;
+    const paginaItems = lista.slice(inicio, fin);
+
+    const contenedor = document.getElementById("contenedor");
+    contenedor.innerHTML = "";
+
+    paginaItems.forEach(item => renderItem(item, tipo, "contenedor"));
+
+    actualizarInfoPaginacion(lista.length);
+  }
+
+  function actualizarInfoPaginacion(totalItems) {
+    const totalPaginas = Math.ceil(totalItems / itemsPorPagina) || 1;
+    document.getElementById("paginaInfo").textContent =
+      `Página ${pagina} de ${totalPaginas}`;
+  }
+
+  function paginaAnterior() {
+    if (pagina > 1) {
+      pagina--;
+      refrescarModo();
+    }
+  }
+
+  function paginaSiguiente() {
+    const totalItems = obtenerListaActual().length;
+    const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+    if (pagina < totalPaginas) {
+      pagina++;
+      refrescarModo();
+    }
+  }
+
+  function irInicio() {
+    pagina = 1;
+    refrescarModo();
+  }
+
+  function irFinal() {
+    const totalItems = obtenerListaActual().length;
+    const totalPaginas = Math.ceil(totalItems / itemsPorPagina);
+    pagina = totalPaginas;
+    refrescarModo();
+  }
+
+  function obtenerListaActual() {
+    switch (modo) {
+      case "peliculas": return peliculas;
+      case "series": return series;
+      case "generos": return generos;
+      case "recientes": return recientes;
+      default: return [];
+    }
+  }
+
+  function refrescarModo() {
+    switch (modo) {
+      case "peliculas": renderPagina(peliculas, "movie"); break;
+      case "series": renderPagina(series, "tv"); break;
+      case "generos": renderPagina(generos, "movie"); break;
+      case "recientes": renderPagina(recientes, "movie"); break;
+    }
+  }
+</script>
 	  
 
     // Nueva función para cargar datos desde CSV usando PapaParse
@@ -519,6 +554,7 @@ function limpiarBusqueda(){
   </script>
 </body>
 </html>
+
 
 
 
