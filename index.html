@@ -70,34 +70,7 @@
   let itemsPorPagina = 30;
   let modo = "peliculas";
 
-  function mostrarPeliculas() {
-    modo = "peliculas";
-    pagina = 1;
-    renderPagina(peliculas, "movie");
-    document.getElementById("tituloSeccion").textContent = "Películas";
-  }
-
-  function mostrarSeries() {
-    modo = "series";
-    pagina = 1;
-    renderPagina(series, "tv");
-    document.getElementById("tituloSeccion").textContent = "Series";
-  }
-
-  function mostrarGeneros() {
-    modo = "generos";
-    pagina = 1;
-    renderPagina(generos, "movie");
-    document.getElementById("tituloSeccion").textContent = "Géneros";
-  }
-
-  function mostrarRecientes() {
-    modo = "recientes";
-    pagina = 1;
-    renderPagina(recientes, "movie");
-    document.getElementById("tituloSeccion").textContent = "Recientes";
-  }
-
+  
   function renderPagina(lista, tipo) {
     const inicio = (pagina - 1) * itemsPorPagina;
     const fin = inicio + itemsPorPagina;
@@ -554,6 +527,7 @@ function limpiarBusqueda(){
   </script>
 </body>
 </html>
+
 
 
 
