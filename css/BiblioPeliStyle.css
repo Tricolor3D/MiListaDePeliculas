@@ -292,7 +292,7 @@ h1 {
 .banner {
   width: 100%;
   height: 250px; /* ajusta la altura según prefieras */
-  background-image: url("img/Banner4.png");
+  background-image: url("../img/Banner4.png");
   background-size: cover;
   background-position: center;
   display: flex;
