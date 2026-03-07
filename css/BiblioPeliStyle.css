@@ -42,11 +42,7 @@ h1 {
   transform: translateY(-2px);
 }
 
-h2 { 
-  color: #01b4e4; 
-  font-size: 2em; 
-  margin-top: 20px;
-}
+
 
 .contenedor { 
   display: flex; 
