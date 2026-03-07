@@ -215,10 +215,18 @@ h1 {
   align-items: center;
   margin: 20px 0;
   gap: 15px;
+  flex-wrap: wrap;          /* se adapta en pantallas pequeñas */
 }
+
+.input-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 600px;         /* ancho máximo del campo */
+}
+
 .input-wrapper input {
   width: 100%;
-  padding: 10px 40px;
+  padding: 10px 40px;       /* espacio para íconos dentro */
   border-radius: 25px;
   border: 1px solid var(--accent-color);
   outline: none;
@@ -232,6 +240,22 @@ h1 {
 .input-wrapper input:focus {
   background-color: rgba(74,144,226,0.1); /* azul translúcido suave */
   border-color: var(--accent-color);
+}
+
+.input-wrapper .icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  fill: var(--accent-color);
+  cursor: pointer;
+}
+
+.input-wrapper .lupa {
+  left: 12px;               /* ícono de lupa a la izquierda */
+}
+
+.input-wrapper .borrar {
+  right: 12px;              /* ícono X a la derecha */
 }
 
 .buscador select {
@@ -248,4 +272,3 @@ h1 {
   background-color: var(--accent-color);
   color: #fff;
 }
-
