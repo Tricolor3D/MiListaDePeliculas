@@ -43,12 +43,15 @@ h1 {
 }
 
 
-
-.contenedor { 
-  display: flex; 
-  flex-wrap: wrap; 
-  justify-content: center;
+/* Contenedor de paginación */
+.paginacion {
+  display: flex;
+  justify-content: center;   /* centra horizontalmente */
+  align-items: center;       /* alinea verticalmente */
+  gap: 15px;                 /* espacio entre botones y contador */
+  margin: 20px 0;            /* separación con el resto del contenido */
 }
+
 
 /* Tarjetas de películas */
 .pelicula {  
