@@ -215,43 +215,38 @@ h2 {
 }
 
 
-/* 馃攷 Estilos del buscador con 铆conos integrados */
-.buscador {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-  gap: 15px;
-}
-.input-wrapper {
-  position: relative;
-  flex: 1;
-  max-width: 600px;
-}
+/* Buscador */
 .input-wrapper input {
   width: 100%;
   padding: 10px 40px;
   border-radius: 25px;
-  border: 1px solid #555;
+  border: 1px solid var(--accent-color);
   outline: none;
   font-size: 16px;
-  background-color: #0d253f;
-  color: white;
+  background-color: transparent;
+  color: #fff;
   box-sizing: border-box;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
-.input-wrapper .icon {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
+
+.input-wrapper input:focus {
+  background-color: rgba(74,144,226,0.1); /* azul translúcido suave */
+  border-color: var(--accent-color);
 }
-.input-wrapper .lupa { left: 12px; }
-.input-wrapper .borrar { right: 12px; }
+
 .buscador select {
   padding: 10px;
   border-radius: 25px;
-  border: 1px solid #555;
+  border: 1px solid var(--accent-color);
   font-size: 14px;
-  background-color: #0d253f;
-  color: white;
+  background-color: transparent;
+  color: var(--accent-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.buscador select:focus {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+
