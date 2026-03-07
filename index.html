@@ -52,13 +52,14 @@
   <div id="contenedor" class="contenedor"></div>
 
   <!-- Paginación -->
-  <div class="paginacion">
-    <button onclick="irInicio()">Inicio</button>
-    <button onclick="paginaAnterior()">Anterior</button>
-    <span id="paginaInfo">Página 1 de 1</span>
-    <button onclick="paginaSiguiente()">Siguiente</button>
-    <button onclick="irFinal()">Final</button>
-  </div>
+<div class="paginacion">
+  <button onclick="irInicio()">Inicio</button>
+  <button onclick="paginaAnterior()">Anterior</button>
+  <span id="paginaInfo">Página 1 de 1</span>
+  <button onclick="paginaSiguiente()">Siguiente</button>
+  <button onclick="irFinal()">Final</button>
+</div>
+
 
   <script>
     let peliculas = [];
@@ -195,70 +196,56 @@
       renderPagina(recientes, modoAnterior==="series"?"tv":"movie");
     }
 
-    // Mostrar géneros
-    function mostrarGeneros(){
-      modo="generos";
-      pagina=1;
-      document.getElementById("tituloSeccion").textContent="Géneros";
-      document.getElementById("contenedor").innerHTML="";
+    /// Mostrar géneros
+  function mostrarGeneros(){
+    modo="generos";
+    pagina=1;
+    document.getElementById("tituloSeccion").textContent="Géneros";
+    document.getElementById("contenedor").innerHTML="";
 
-      const imagenesGeneros = {
-        "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-        "Aventura":"https://image.tmdb.org/t/p/w500/2l05cFWJacyIsTpsqSgH0wQXe4V.jpg",
-        "Animación":"https://image.tmdb.org/t/p/original/hHRvKl4zwS234fcjypa82A2Ecjr.jpg",
-        "Comedia":"https://image.tmdb.org/t/p/original/7MWPHp6aErgfzgLFJIrFBzyvkn8.jpg",
-        "Crimen":"https://image.tmdb.org/t/p/original/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
-        "Ciencia ficción":"https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
-        "Documental":"https://image.tmdb.org/t/p/original/unUbH6qKsBCz8lVK2soEQ1zsfYR.jpg",
-        "Drama":"https://image.tmdb.org/t/p/original/ncKCQVXgk4BcQV6XbvesgZ2zLvZ.jpg",
-        "Música":"https://image.tmdb.org/t/p/original/Aktq3lNarQAy520HyemewnFvFad.jpg",
-        "Thriller":"https://image.tmdb.org/t/p/w500/5WJnxuw41sddupf8cwOxYftuvJG.jpg",
-        "Terror":"https://image.tmdb.org/t/p/original/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg",
-        "Western":"https://image.tmdb.org/t/p/original/eUZbn652KXfWMwh6Oe4PdeJfKuS.jpg"
-      };
+    const imagenesGeneros = {
+      "Acción":"https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
+      "Aventura":"https://image.tmdb.org/t/p/w500/2l05cFWJacyIsTpsqSgH0wQXe4V.jpg",
+      "Animación":"https://image.tmdb.org/t/p/original/hHRvKl4zwS234fcjypa82A2Ecjr.jpg",
+      "Comedia":"https://image.tmdb.org/t/p/original/7MWPHp6aErgfzgLFJIrFBzyvkn8.jpg",
+      "Crimen":"https://image.tmdb.org/t/p/original/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg",
+      "Ciencia ficción":"https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+      "Documental":"https://image.tmdb.org/t/p/original/unUbH6qKsBCz8lVK2soEQ1zsfYR.jpg",
+      "Drama":"https://image.tmdb.org/t/p/original/ncKCQVXgk4BcQV6XbvesgZ2zLvZ.jpg",
+      "Música":"https://image.tmdb.org/t/p/original/Aktq3lNarQAy520HyemewnFvFad.jpg",
+      "Thriller":"https://image.tmdb.org/t/p/w500/5WJnxuw41sddupf8cwOxYftuvJG.jpg",
+      "Terror":"https://image.tmdb.org/t/p/original/tFXcEccSQMf3lfhfXKSU9iRBpa3.jpg",
+      "Western":"https://image.tmdb.org/t/p/original/eUZbn652KXfWMwh6Oe4PdeJfKuS.jpg"
+    };
 
-      const todosGeneros = [...peliculas.map(p=>p.genres), ...series.map(s=>s.genres)];
-      const nombresIncluidos = new Set();
-      const generosUnicos = [];
+    const todosGeneros = [...peliculas.map(p=>p.genres), ...series.map(s=>s.genres)];
+    const nombresIncluidos = new Set();
+    const generosUnicos = [];
 
-      todosGeneros.forEach(gStr=>{
-        if(gStr){
-          gStr.split(",").forEach(g=>{
-            const nombre = g.trim();
-            if(Object.keys(imagenesGeneros).includes(nombre) && !nombresIncluidos.has(nombre)){
-              nombresIncluidos.add(nombre);
-              generosUnicos.push({name:nombre});
-            }
-          });
-        }
-      });
+    todosGeneros.forEach(gStr=>{
+      if(gStr){
+        gStr.split(",").forEach(g=>{
+          const nombre = g.trim();
+          if(Object.keys(imagenesGeneros).includes(nombre) && !nombresIncluidos.has(nombre)){
+            nombresIncluidos.add(nombre);
+            generosUnicos.push({name:nombre});
+          }
+        });
+      }
+    });
 
-      generosUnicos.forEach(g=>{
-        const div=document.createElement("div");
-        div.className="genero-card";
-        const img=imagenesGeneros[g.name];
-        div.style.backgroundImage=`url('${img}')`;
-        div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
-        div.onclick=()=>mostrarPorGenero(g.name);
-        document.getElementById("contenedor").appendChild(div);
-      });
-    }
+    generosUnicos.forEach(g=>{
+      const div=document.createElement("div");
+      div.className="genero-card";
+      const img=imagenesGeneros[g.name];
+      div.style.backgroundImage=`url('${img}')`;
+      div.innerHTML=`<div class="overlay"><p>${g.name}</p></div>`;
+      div.onclick=()=>mostrarPorGenero(g.name);
+      document.getElementById("contenedor").appendChild(div);
+    });
+  }
+</script>
 
-    let resultadosGenero=[];
-    let generoActualNombre=null;
-
-    function mostrarPorGenero(nombreGenero){
-      modo="generos";
-      pagina=1;
-      generoActualNombre=nombreGenero;
-      document.getElementById("tituloSeccion").textContent="Género: "+nombreGenero;
-      cargarPorGenero(nombreGenero);
-      renderPagina(resultadosGenero, "movie");
-    }
-
-    function cargarPorGenero(nombreGenero){
-      resultadosGenero = [...peliculas, ...series].filter(item=>item.genres && item.genres.includes(nombreGenero));
-    }
 	    // Mostrar página actual (optimizado: carga solo 30 ítems)
     function renderPagina(lista, tipo) {
       document.getElementById("contenedor").innerHTML="";
@@ -439,3 +426,4 @@
   </script>
 </body>
 </html>
+
