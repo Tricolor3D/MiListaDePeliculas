@@ -1,3 +1,8 @@
+:root {
+  --accent-color: #4a90e2;   /* azul más suave */
+  --accent-hover: #5c7fa3;   /* azul grisáceo para hover */
+}
+
 body { 
   font-family: "Segoe UI", Arial, sans-serif; 
   background: #0d253f; 
@@ -18,20 +23,22 @@ h1 {
   margin: 20px 0;
 }
 
-.menu button { 
-  background: #1e1e1e;       /* gris oscuro plano */
-  border: none; 
-  padding: 10px 20px; 
-  border-radius: 6px; 
-  color: white; 
-  cursor: pointer; 
-  font-weight: 500; 
+* Botones del menú */
+.menu button {
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  padding: 10px 20px;
+  border-radius: 25px;
+  color: var(--accent-color);
+  font-weight: 500;
   font-size: 14px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.menu button:hover { 
-  background: #01b4e4;        /* azul acento */
+.menu button:hover {
+  background: var(--accent-color);
+  color: #fff;
   transform: translateY(-2px);
 }
 
@@ -150,27 +157,21 @@ h2 {
   font-weight: 400;
 }
 
-/* Paginación */
-.paginacion {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin: 25px 0;
-}
-
+/* Botones de paginación */
 .paginacion button {
-  background: #1e1e1e;
-  border: none;
+  background: transparent;
+  border: 1px solid var(--accent-color);
   padding: 8px 16px;
-  border-radius: 6px;
-  color: #ffffff;
+  border-radius: 20px;
+  color: var(--accent-color);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .paginacion button:hover {
-  background: #01b4e4;
+  background: var(--accent-hover);
+  color: #fff;
   transform: scale(1.05);
 }
 
