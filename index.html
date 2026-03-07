@@ -51,8 +51,7 @@
   <h2 id="tituloSeccion">Películas</h2>
   <!-- 👇 Ajuste: id + clase para que se apliquen estilos -->
   <div id="contenedor" class="contenedor contenedor-generos"></div>
-
-  <!-- Paginación -->
+    <!-- Paginación -->
   <div class="paginacion">
     <button onclick="irInicio()">Inicio</button>
     <button onclick="paginaAnterior()">Anterior</button>
@@ -61,42 +60,74 @@
     <button onclick="irFinal()">Final</button>
   </div>
 
-  <!-- Bloque de JavaScript -->
   <script>
-    // Todas tus variables y funciones (películas, series, renderItem, mostrarPeliculas, mostrarSeries, mostrarRecientes, mostrarGeneros, mostrarPorGenero, cargarPorGenero, renderPagina, buscar, limpiarBusqueda, navegación, refrescarModo, inicialización)
-    // 👇 Aquí va exactamente el código que me pasaste en los bloques 2, 3 y 4, pero SIN el cierre </script> en el medio.
+    let peliculas = [];
+    let series = [];
+    let generos = [];
+    let recientes = [];
+    let pagina = 1;
+    let itemsPorPagina = 30; // ahora mostramos 30 por página
+    let modo = "peliculas"; 
+    let modoAnterior = "peliculas";
 
-    // Inicialización optimizada con PapaParse
+    // Nueva función para cargar datos desde CSV usando PapaParse
+    async function cargarCSV(ruta) {
+      const resp = await fetch(ruta);
+      const texto = await resp.text();
+      const resultado = Papa.parse(texto, {header:true, skipEmptyLines:true});
+      return resultado.data;
+    }
+
+    // Renderizar tarjeta de película/serie
+    function renderItem(data, type, containerId) {
+      // ... tu código renderItem completo aquí ...
+    }
+
+    // Función para convertir una fila CSV en objeto película
+    function filaAPelicula(cols) { ... }
+
+    // Función para convertir una fila CSV en objeto serie
+    function filaASerie(cols) { ... }
+
+    // Mostrar películas
+    function mostrarPeliculas(){ ... }
+
+    // Mostrar series
+    function mostrarSeries(){ ... }
+
+    // Mostrar recientes
+    function mostrarRecientes(){ ... }
+        // Mostrar géneros
+    function mostrarGeneros(){ ... }
+
+    // Mostrar página actual
+    function renderPagina(lista, tipo) { ... }
+
+    function actualizarInfoPaginacion(totalItems) { ... }
+
+    // Bloque del buscador
+    function buscar(){ ... }
+
+    function limpiarBusqueda(){ ... }
+
+    // Funciones de navegación
+    function paginaAnterior(){ ... }
+    function paginaSiguiente(){ ... }
+    function irInicio(){ ... }
+    function irFinal(){ ... }
+
+    function obtenerListaActual(){ ... }
+
+    function refrescarModo(){ ... }
+        // Inicialización optimizada con PapaParse
     (async function(){
       const peliculasRaw = await cargarCSV("peliculas.csv");
       const seriesRaw = await cargarCSV("series.csv");
 
-      peliculas = peliculasRaw.map(item => ({
-        id: item.id,
-        title: item.title,
-        release_date: item.release_date,
-        director: item.director,
-        actors: item.actors,
-        genres: item.genres,
-        vote_average: item.vote_average,
-        poster_path: item.poster_path,
-        overview: item.overview,
-        ubicacion: item.ubicacion
-      }));
+      peliculas = peliculasRaw.map(item => ({ ... }));
+      series = seriesRaw.map(item => ({ ... }));
 
-      series = seriesRaw.map(item => ({
-        id: item.id,
-        name: item.name,
-        first_air_date: item.first_air_date,
-        actors: item.actors,
-        genres: item.genres,
-        vote_average: item.vote_average,
-        poster_path: item.poster_path,
-        overview: item.overview,
-        ubicacion: item.ubicacion
-      }));
-
-      mostrarPeliculas(); // arrancamos mostrando películas
+      mostrarPeliculas();
     })();
   </script>
 </body>
