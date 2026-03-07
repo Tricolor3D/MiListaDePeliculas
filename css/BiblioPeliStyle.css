@@ -1,133 +1,228 @@
-body { font-family:"Segoe UI",Arial,sans-serif; background:#0d253f; color:white; margin:20px;}
-h1 { text-align:center; color:#01b4e4; font-size:2.5em;}
-.menu { display:flex; justify-content:center; gap:20px; margin:20px 0;}
-.menu button { background:#01b4e4; border:none; padding:10px 20px; border-radius:5px; color:white; cursor:pointer; font-weight:bold;}
-.menu button:hover { background:#0288a7;}
-h2 { color:#01b4e4; font-size:2em; margin-top:20px;}
-.contenedor { display:flex; flex-wrap:wrap; justify-content:center;}
-
-/* 馃攷 Ajuste de las tarjetas de pel铆culas */
-.pelicula { 
-  display:inline-block; 
-  margin:20px; 
-  text-align:center; 
-  width:200px; 
-  position:relative;
+body { 
+  font-family: "Segoe UI", Arial, sans-serif; 
+  background: #0d253f; 
+  color: white; 
+  margin: 20px;
 }
 
-.pelicula img { 
-  width:100%; 
-  aspect-ratio: 2 / 3;   /* proporci贸n fija de p贸ster */
-  object-fit: cover;     /* recorta manteniendo proporci贸n */
-  border-radius:8px; 
-  box-shadow:0 4px 10px rgba(0,0,0,0.5);
+h1 { 
+  text-align: center; 
+  color: #01b4e4; 
+  font-size: 2.5em;
 }
 
-.pelicula p { 
-  margin-top:8px; 
-  font-size:1.05em; 
-  color:white; 
-  font-weight:normal;
+.menu { 
+  display: flex; 
+  justify-content: center; 
+  gap: 20px; 
+  margin: 20px 0;
 }
 
-/* 馃攷 Ajuste del c铆rculo de calificaci贸n */
-.rating-circle { 
-  position:absolute; 
-  bottom:55px;   /* esquina inferior izquierda */
-  left:-5px;     
-  width:48px; 
-  height:48px;
-  border-radius:50%; 
-  background:rgba(0,0,0,0.4); /* fondo semitransparente */
-  box-shadow:0 0 6px rgba(0,0,0,0.8); /* sombra para separarlo del p贸ster */
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.menu button { 
+  background: #1e1e1e;       /* gris oscuro plano */
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 6px; 
+  color: white; 
+  cursor: pointer; 
+  font-weight: 500; 
+  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
-.rating-circle svg { 
-  width:48px;
-  height:48px;
-  transform:rotate(-90deg);
+.menu button:hover { 
+  background: #01b4e4;        /* azul acento */
+  transform: translateY(-2px);
 }
 
-.rating-text { 
-  position:absolute; 
-  top:50%; 
-  left:50%; 
-  transform:translate(-50%,-50%); 
-  font-size:0.8em; 
-  font-weight:bold; 
-  color:white;
+h2 { 
+  color: #01b4e4; 
+  font-size: 2em; 
+  margin-top: 20px;
 }
 
-.progress { 
-  transition:stroke-dashoffset 1.5s ease; /* animaci贸n suave */
+.contenedor { 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center;
 }
 
-/* 馃攷 Popup con animaci贸n */
-/* Popup normal (se abre hacia la izquierda) */
-.popup { 
-  position:absolute; 
-  bottom:30%; 
-  left:0; 
-  width:250%; 
-  height:60%; 
-  background:rgba(0,0,0,0.7); 
-  backdrop-filter:blur(8px);
-  color:white; 
-  opacity:0; 
-  transform:translateY(20px); 
-  transition:opacity 0.4s ease, transform 0.4s ease; 
-  border-radius:8px; 
-  padding:10px; 
-  box-sizing:border-box; 
-  font-size:0.9em; 
-  overflow-y:auto; 
-  z-index:1000;
+/* Tarjetas de películas */
+.pelicula {  
+  display: inline-block;  
+  margin: 20px;  
+  text-align: center;  
+  width: 200px;  
+  position: relative;
 }
 
-/* Popup invertido (se abre hacia la derecha) */
-.popup.right { 
-  left:auto; 
-  right:0;   /* se apoya en el borde derecho del p贸ster */
-  width:250%; 
+.pelicula img {  
+  width: 100%;  
+  aspect-ratio: 2 / 3;   
+  object-fit: cover;     
+  border-radius: 10px;  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease;
 }
 
-/* 鉂?Eliminamos esta regla para que no aparezca con hover inmediato */
-/* .pelicula:hover .popup { opacity:1; } */
-
-.popup h3 { margin:0; color:#01b4e4; font-size:1em; font-weight:normal;}
-.popup p { margin:2px 0; font-weight:normal;}
-
-.paginacion { text-align:center; margin:20px;}
-.paginacion button { background:#01b4e4; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; margin:0 10px;}
-.paginacion button:hover { background:#0288a7;}
-
-/* Tarjetas de g茅neros */
-.genero-card {
-  width:200px;
-  aspect-ratio: 2 / 3;   /* proporci贸n fija */
-  margin:15px;
-  border-radius:10px;
-  background-size:cover;
-  background-position:center;
-  position:relative;
-  cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,0.6);
-  transition:transform 0.3s ease;
+.pelicula img:hover {
+  transform: scale(1.03);
 }
-.genero-card:hover { transform:scale(1.05);}
-.genero-card .overlay {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  background:rgba(0,0,0,0.7);
-  text-align:center;
-  padding:10px;
-  border-radius:0 0 10px 10px;
+
+.pelicula p {  
+  margin-top: 8px;  
+  font-size: 1.05em;  
+  color: white;  
+  font-weight: 400;
 }
-.genero-card p { margin:0; color:#01b4e4; font-weight:bold; font-size:1.2em;}
+
+/* Círculo de calificación */
+.rating-circle {  
+  position: absolute;  
+  bottom: 55px;   
+  left: -5px;     
+  width: 48px;  
+  height: 48px;
+  border-radius: 50%;  
+  background: rgba(0,0,0,0.5); 
+  box-shadow: 0 0 6px rgba(0,0,0,0.8); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rating-circle svg {  
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg);
+}
+
+.rating-text {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%,-50%);  
+  font-size: 0.8em;  
+  font-weight: bold;  
+  color: white;
+}
+
+.progress {  
+  transition: stroke-dashoffset 1.5s ease; 
+}
+
+body { 
+  font-family: "Segoe UI", Arial, sans-serif; 
+  background: #0d253f; 
+  color: white; 
+  margin: 20px;
+}
+
+h1 { 
+  text-align: center; 
+  color: #01b4e4; 
+  font-size: 2.5em;
+}
+
+.menu { 
+  display: flex; 
+  justify-content: center; 
+  gap: 20px; 
+  margin: 20px 0;
+}
+
+.menu button { 
+  background: #1e1e1e;       /* gris oscuro plano */
+  border: none; 
+  padding: 10px 20px; 
+  border-radius: 6px; 
+  color: white; 
+  cursor: pointer; 
+  font-weight: 500; 
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.menu button:hover { 
+  background: #01b4e4;        /* azul acento */
+  transform: translateY(-2px);
+}
+
+h2 { 
+  color: #01b4e4; 
+  font-size: 2em; 
+  margin-top: 20px;
+}
+
+.contenedor { 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center;
+}
+
+/* Tarjetas de películas */
+.pelicula {  
+  display: inline-block;  
+  margin: 20px;  
+  text-align: center;  
+  width: 200px;  
+  position: relative;
+}
+
+.pelicula img {  
+  width: 100%;  
+  aspect-ratio: 2 / 3;   
+  object-fit: cover;     
+  border-radius: 10px;  
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  transition: transform 0.3s ease;
+}
+
+.pelicula img:hover {
+  transform: scale(1.03);
+}
+
+.pelicula p {  
+  margin-top: 8px;  
+  font-size: 1.05em;  
+  color: white;  
+  font-weight: 400;
+}
+
+/* Círculo de calificación */
+.rating-circle {  
+  position: absolute;  
+  bottom: 55px;   
+  left: -5px;     
+  width: 48px;  
+  height: 48px;
+  border-radius: 50%;  
+  background: rgba(0,0,0,0.5); 
+  box-shadow: 0 0 6px rgba(0,0,0,0.8); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rating-circle svg {  
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg);
+}
+
+.rating-text {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%,-50%);  
+  font-size: 0.8em;  
+  font-weight: bold;  
+  color: white;
+}
+
+.progress {  
+  transition: stroke-dashoffset 1.5s ease; 
+}
 
 /* 馃攷 Estilos del buscador con 铆conos integrados */
 .buscador {
