@@ -290,18 +290,23 @@ h1 {
 }
 /* Banner de fondo */
 .banner {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 200px; /* altura del cabezal */
+  height: 250px; /* ajusta la altura según prefieras */
   background-image: url("img/Banner4.png");
   background-size: cover;
   background-position: center;
-  z-index: -1; /* queda detrás del resto */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 
-/* Empujar el contenido debajo del banner */
-body {
-  margin-top: 200px;
+/* Ajustar el título dentro del banner */
+.banner h1 {
+  margin: 0;
+  padding: 10px;
+  font-size: 2em;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
+
