@@ -288,10 +288,11 @@ h1 {
   background-color: var(--accent-color);
   color: #fff;
 }
-/* Banner de fondo */
+/* Banner con overlay */
 .banner {
+  position: relative;
   width: 100%;
-  height: 250px; /* ajusta la altura según prefieras */
+  height: 250px;
   background-image: url("../img/Banner4.png");
   background-size: cover;
   background-position: center;
@@ -302,11 +303,27 @@ h1 {
   color: white;
 }
 
-/* Ajustar el título dentro del banner */
-.banner h1 {
-  margin: 0;
-  padding: 10px;
-  font-size: 2em;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+/* Overlay semitransparente */
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.4); /* negro con 40% transparencia */
+  z-index: 0;
+}
+
+/* Asegurar que el contenido quede encima del overlay */
+.banner h1,
+.banner .buscador,
+.banner .menu {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ajustar buscador dentro del banner */
+.banner .buscador {
+  width: 80%;
+  max-width: 600px;
 }
 
