@@ -209,6 +209,13 @@ h1 {
 }
 
 /* Buscador */
+.buscador {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  gap: 15px;
+}
 .input-wrapper input {
   width: 100%;
   padding: 10px 40px;
