@@ -178,6 +178,15 @@ h1 {
   align-self: center;
 }
 
+/* Contenedor de tarjetas de géneros */
+.contenedor-generos {
+  display: flex;
+  flex-wrap: wrap;          /* permite varias filas */
+  justify-content: center;  /* centra horizontalmente */
+  gap: 20px;                /* espacio uniforme entre tarjetas */
+  margin: 20px 0;
+}
+
 /* Tarjetas de géneros */
 .genero-card {
   width: 200px;
@@ -191,10 +200,12 @@ h1 {
   box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .genero-card:hover { 
   transform: scale(1.05);
   box-shadow: 0 6px 16px rgba(0,0,0,0.6);
 }
+
 .genero-card .overlay {
   position: absolute;
   bottom: 0;
@@ -204,12 +215,14 @@ h1 {
   padding: 10px;
   border-radius: 0 0 12px 12px;
 }
+
 .genero-card p { 
   margin: 0; 
   color: #01b4e4; 
   font-weight: 600; 
   font-size: 1.1em;
 }
+
 
 /* Buscador */
 .buscador {
