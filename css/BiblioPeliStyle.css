@@ -288,32 +288,31 @@ h1 {
   background-color: var(--accent-color);
   color: #fff;
 }
-/* Banner con imagen translúcida */
 .banner {
   position: relative;
   width: 100%;
-  height: 150px;
+  height: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
-  overflow: hidden; /* asegura que el pseudo-elemento no se desborde */
+  overflow: hidden;
 }
 
-/* Imagen de fondo con transparencia */
+/* Imagen de fondo completa con transparencia */
 .banner::before {
   content: "";
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   background-image: url("../img/Banner4.png");
-  background-size: cover;
+  background-size: contain;   /* 👈 muestra la imagen completa */
+  background-repeat: no-repeat;
   background-position: center;
-  opacity: 0.2; /* muy transparente */
+  opacity: 0.5;               /* 👈 ajusta la transparencia */
   z-index: 0;
 }
-
 
 /* Contenido encima */
 .banner h1,
