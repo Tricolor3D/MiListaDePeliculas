@@ -288,10 +288,11 @@ h1 {
   background-color: var(--accent-color);
   color: #fff;
 }
+/* Banner con proporción fija */
 .banner {
   position: relative;
   width: 100%;
-  height: 250px;
+  aspect-ratio: 3 / 1; /* 👈 ajusta según la proporción de tu imagen */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -300,17 +301,16 @@ h1 {
   overflow: hidden;
 }
 
-/* Imagen de fondo completa con transparencia */
+/* Imagen de fondo translúcida */
 .banner::before {
   content: "";
   position: absolute;
   top: 0; left: 0;
-  width: 200%; height: 200%;
+  width: 100%; height: 100%;
   background-image: url("../img/Banner4.png");
-  background-size: contain;   /* 👈 muestra la imagen completa */
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.5;               /* 👈 ajusta la transparencia */
+  background-size: cover;       /* llena el ancho */
+  background-position: center;  /* centrada */
+  opacity: 0.5;                 /* 👈 ajusta la transparencia */
   z-index: 0;
 }
 
@@ -327,4 +327,5 @@ h1 {
   width: 80%;
   max-width: 600px;
 }
+
 
