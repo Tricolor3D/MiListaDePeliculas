@@ -310,9 +310,10 @@ h1 {
   background-image: url("../img/Banner4.png");
   background-size: cover;
   background-position: center;
-  opacity: 0.1; /* 👈 ajusta aquí la transparencia */
+  opacity: 0.2; /* muy transparente */
   z-index: 0;
 }
+
 
 /* Contenido encima */
 .banner h1,
