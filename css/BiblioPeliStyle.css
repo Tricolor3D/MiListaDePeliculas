@@ -292,7 +292,7 @@ h1 {
 .banner {
   position: relative;
   width: 100%;
-  height: 250px; /* 👈 altura fija del banner */
+  height: 350px; /* 👈 altura fija del banner */
   display: flex;
   flex-direction: column;
   align-items: center;
