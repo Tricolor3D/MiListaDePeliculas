@@ -15,6 +15,12 @@ h1 {
   color: #01b4e4; 
   font-size: 2.5em;
 }
+h2 {
+  text-align: center;
+  color: #01b4e4;   /* mismo color que h1 */
+  font-size: 2em;   /* un poco más chico que h1 */
+  margin-top: 20px; /* espacio respecto al banner */
+}
 
 .menu { 
   display: flex; 
