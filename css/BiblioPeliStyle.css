@@ -313,8 +313,8 @@ h1 {
   background-position: center;
 
   /* 👇 Ajuste clave */
-  background-color: rgba(255,255,255,0.2); /* capa blanca semitransparente */
-  background-blend-mode: lighten;          /* mezcla la imagen con la capa */
+  background-color: rgba(255,255,255,0.3); /* capa blanca semitransparente */
+  background-blend-mode: multiply;          /* mezcla la imagen con la capa */
 
   display: flex;
   flex-direction: column;
