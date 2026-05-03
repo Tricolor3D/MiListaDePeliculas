@@ -407,41 +407,77 @@
         case "recientes": renderPagina(recientes, "movie"); break;
       }
     }
-        // Inicialización optimizada con PapaParse
-    (async function(){
-      const peliculasRaw = await cargarCSV("peliculas.csv");
-      const seriesRaw = await cargarCSV("series.csv");
+        // Función genérica para cargar un CSV con PapaParse
+function cargarCSV(archivo) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(archivo, {
+      download: true,
+      header: true,
+      complete: results => resolve(results.data),
+      error: err => reject(err)
+    });
+  });
+}
 
-      // Mapear columnas para asegurar que todas las propiedades existen
-      peliculas = peliculasRaw.map(item => ({
-        id: item.id,
-        title: item.title,
-        release_date: item.release_date,
-        director: item.director,
-        actors: item.actors,
-        genres: item.genres,
-        vote_average: item.vote_average,
-        poster_path: item.poster_path,
-        overview: item.overview,
-        ubicacion: item.ubicacion
-      }));
+// Función para cargar varios CSV y unirlos
+async function cargarMultiplesCSV(archivos) {
+  let datos = [];
+  for (const archivo of archivos) {
+    const parcial = await cargarCSV(archivo);
+    datos = datos.concat(parcial);
+  }
+  return datos;
+}
 
-      series = seriesRaw.map(item => ({
-        id: item.id,
-        name: item.name,
-        first_air_date: item.first_air_date,
-        actors: item.actors,
-        genres: item.genres,
-        vote_average: item.vote_average,
-        poster_path: item.poster_path,
-        overview: item.overview,
-        ubicacion: item.ubicacion
-      }));
+// Inicialización optimizada con PapaParse
+(async function(){
+  // 👉 Aquí defines tus archivos divididos
+  const archivosPeliculas = [
+  "data/peliculas.csv",
+  "data/peliculas1.csv",
+  "data/peliculas2.csv",
+  "data/peliculas3.csv"
+];
 
-      // Arrancamos mostrando películas
-      mostrarPeliculas();
-    })();
-  </script>
+const archivosSeries = [
+  "data/series.csv",
+  "data/series1.csv"
+];
+
+  // Cargar todos los bloques y unirlos
+  const peliculasRaw = await cargarMultiplesCSV(archivosPeliculas);
+  const seriesRaw = await cargarMultiplesCSV(archivosSeries);
+
+  // Mapear columnas para asegurar que todas las propiedades existen
+  peliculas = peliculasRaw.map(item => ({
+    id: item.id,
+    title: item.title,
+    release_date: item.release_date,
+    director: item.director,
+    actors: item.actors,
+    genres: item.genres,
+    vote_average: item.vote_average,
+    poster_path: item.poster_path,
+    overview: item.overview,
+    ubicacion: item.ubicacion
+  }));
+
+  series = seriesRaw.map(item => ({
+    id: item.id,
+    name: item.name,
+    first_air_date: item.first_air_date,
+    actors: item.actors,
+    genres: item.genres,
+    vote_average: item.vote_average,
+    poster_path: item.poster_path,
+    overview: item.overview,
+    ubicacion: item.ubicacion
+  }));
+
+  // Arrancamos mostrando películas
+  mostrarPeliculas();
+})();
+</script>
 </body>
 </html>
 
