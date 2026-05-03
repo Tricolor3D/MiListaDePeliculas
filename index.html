@@ -372,9 +372,19 @@
 
     // Inicialización escalable con varios CSV desde carpeta data
     (async function(){
-      // Listado de archivos CSV
-      const archivosPeliculas = ["data/peliculas.csv", "data/peliculas1.csv"];
-      const archivosSeries   = ["data/series.csv", "data/series1.csv"];
+      
+     // Listado de archivos CSV
+const archivosPeliculas = [
+  "data/peliculas.csv",
+  "data/peliculas1.csv",
+  "data/peliculas2.csv"   // nuevo archivo agregado
+];
+
+const archivosSeries = [
+  "data/series.csv",
+  "data/series1.csv"      // nuevo archivo agregado
+];
+
 
       // Cargar todos los CSV en paralelo
       const peliculasRaw = (await Promise.all(archivosPeliculas.map(cargarCSV))).flat();
