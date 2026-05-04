@@ -71,10 +71,14 @@
     let modoAnterior = "peliculas";
 
     async function cargarCSV(ruta) {
-      const resp = await fetch(ruta);
-      const texto = await resp.text();
-      const resultado = Papa.parse(texto, {header:true, skipEmptyLines:true});
-      return resultado.data;
+  const resp = await fetch(ruta);
+  const texto = await resp.text();
+  const resultado = Papa.parse(texto, {
+    header: true,
+    skipEmptyLines: true,
+    delimiter: ";"   // 👈 aquí indicamos que el separador es punto y coma
+  });
+  return resultado.data;
     }
 
     function renderItem(data, type, containerId) {
