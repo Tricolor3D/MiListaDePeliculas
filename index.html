@@ -373,10 +373,11 @@
       const peliculasRaw1 = await cargarCSV("data/peliculas.csv");
       const peliculasRaw2 = await cargarCSV("data/peliculas1.csv");
       const peliculasRaw3 = await cargarCSV("data/peliculas2.csv");
+      const peliculasRaw4 = await cargarCSV("data/peliculas3.csv");
       const seriesRaw1   = await cargarCSV("data/series.csv");
       const seriesRaw2   = await cargarCSV("data/series1.csv");
 
-      peliculas = [...peliculasRaw1, ...peliculasRaw2, ...peliculasRaw3].map(item => ({
+      peliculas = [...peliculasRaw1, ...peliculasRaw2, ...peliculasRaw3, ...peliculasRaw4].map(item => ({
         id: item.id,
         title: item.title,
         release_date: item.release_date,
