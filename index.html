@@ -375,10 +375,20 @@
       const peliculasRaw3 = await cargarCSV("data/peliculas2.csv");
       const peliculasRaw4 = await cargarCSV("data/peliculas3.csv");
       const peliculasRaw5 = await cargarCSV("data/peliculas4.csv");
-      const seriesRaw1   = await cargarCSV("data/series.csv");
-      const seriesRaw2   = await cargarCSV("data/series1.csv");
+      const peliculasRaw6 = await cargarCSV("data/peliculas5.csv"); // 👈 Agregado peliculas5.csv
+      
+      const seriesRaw1    = await cargarCSV("data/series.csv");
+      const seriesRaw2    = await cargarCSV("data/series1.csv");
 
-      peliculas = [...peliculasRaw1, ...peliculasRaw2, ...peliculasRaw3, ...peliculasRaw4].map(item => ({
+      // 👈 Se incluye peliculasRaw5 y peliculasRaw6 dentro del array
+      peliculas = [
+        ...peliculasRaw1, 
+        ...peliculasRaw2, 
+        ...peliculasRaw3, 
+        ...peliculasRaw4, 
+        ...peliculasRaw5, 
+        ...peliculasRaw6
+      ].map(item => ({
         id: item.id,
         title: item.title,
         release_date: item.release_date,
